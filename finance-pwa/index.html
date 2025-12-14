@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" href="icon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Keuangan</title>
+    <title>Dashboard Keuangan + ATM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
@@ -50,9 +50,18 @@
             font-size: 15px;
         }
 
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background-color: #52525b; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #52525b;
+            border-radius: 10px;
+        }
 
         .ui-card {
             background: #27272a;
@@ -83,43 +92,114 @@
             box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
         }
 
-        .ui-input::placeholder { color: #71717a; }
+        .ui-input::placeholder {
+            color: #71717a;
+        }
 
-        input[type="date"] { position: relative; cursor: pointer; }
+        .ui-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        input[type="date"] {
+            position: relative;
+            cursor: pointer;
+        }
+
         input[type="date"]::-webkit-calendar-picker-indicator {
-            background: transparent; bottom: 0; color: transparent;
-            cursor: pointer; height: auto; left: 0; position: absolute; right: 0; top: 0; width: auto;
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
         }
 
         .btn-primary {
-            height: 48px; display: flex; align-items: center; justify-content: center;
-            font-weight: 700; border-radius: 12px; transition: all 0.2s;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.2s;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
-        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
 
         .btn-sm {
-            padding: 6px 12px; border-radius: 8px; font-size: 0.75rem;
-            font-weight: 600; transition: all 0.2s; cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
         }
 
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
         .cal-cell {
-            height: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-radius: 8px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
-            position: relative; background-color: #3f3f46; color: #d4d4d8; font-weight: 600;
+            height: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            background-color: #3f3f46;
+            color: #d4d4d8;
+            font-weight: 600;
         }
-        .cal-cell:hover { background-color: #52525b; color: white; }
-        .cal-cell.active { background-color: #6366f1; color: white; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4); }
-        .cal-cell.today:not(.active) { border: 2px solid #6366f1; background-color: transparent; }
 
-        .dot-container { display: flex; gap: 2px; position: absolute; bottom: 3px; }
-        .dot { width: 4px; height: 4px; border-radius: 50%; }
+        .cal-cell:hover {
+            background-color: #52525b;
+            color: white;
+        }
+
+        .cal-cell.active {
+            background-color: #6366f1;
+            color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+        }
+
+        .cal-cell.today:not(.active) {
+            border: 2px solid #6366f1;
+            background-color: transparent;
+        }
+
+        .dot-container {
+            display: flex;
+            gap: 2px;
+            position: absolute;
+            bottom: 3px;
+        }
+
+        .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+        }
 
         .ai-text {
             background: linear-gradient(90deg, #818cf8, #c084fc, #818cf8);
-            background-size: 200% auto; color: transparent;
-            -webkit-background-clip: text; background-clip: text;
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
             animation: shine 3s linear infinite;
         }
     </style>
@@ -169,14 +249,17 @@
                 <div class="p-5 custom-scroll overflow-y-auto flex-1 bg-[#27272a]">
                     <form id="trxForm" class="space-y-5">
                         <div
-                            class="bg-zinc-950 p-1 rounded-xl border border-zinc-700 relative h-12 grid grid-cols-2 gap-1">
+                            class="bg-zinc-950 p-1 rounded-xl border border-zinc-700 relative h-12 grid grid-cols-3 gap-1">
                             <div id="typeSlider"
-                                class="absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-rose-500/20 border border-rose-500/50 rounded-lg transition-all duration-300">
+                                class="absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-rose-500/20 border border-rose-500/50 rounded-lg transition-all duration-300">
                             </div>
                             <button type="button" onclick="setTransactionType('expense')" id="btnExp"
-                                class="relative z-10 text-xs font-bold text-rose-400 transition-colors">KELUAR</button>
+                                class="relative z-10 text-[10px] lg:text-xs font-bold text-rose-400 transition-colors">KELUAR</button>
                             <button type="button" onclick="setTransactionType('income')" id="btnInc"
-                                class="relative z-10 text-xs font-bold text-zinc-500 hover:text-emerald-300 transition-colors">MASUK</button>
+                                class="relative z-10 text-[10px] lg:text-xs font-bold text-zinc-500 hover:text-emerald-300 transition-colors">MASUK</button>
+                            <button type="button" onclick="setTransactionType('transfer')" id="btnTrf"
+                                class="relative z-10 text-[10px] lg:text-xs font-bold text-zinc-500 hover:text-blue-300 transition-colors">ATM
+                                / TF</button>
                             <input type="hidden" id="inputType" value="expense">
                         </div>
 
@@ -186,13 +269,26 @@
                             <div>
                                 <label class="text-xs font-bold text-zinc-400 uppercase ml-1 mb-1.5 block">Total Nominal
                                     <span class="text-rose-500">*</span></label>
-                                <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                        <span
-                                            class="text-zinc-500 font-bold group-focus-within:text-indigo-400 transition text-lg">Rp</span>
+                                <div class="grid grid-cols-12 gap-2">
+                                    <div class="col-span-12 relative group" id="amountContainer">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <span
+                                                class="text-zinc-500 font-bold group-focus-within:text-indigo-400 transition text-lg">Rp</span>
+                                        </div>
+                                        <input type="number" id="inputAmount" placeholder="0"
+                                            class="ui-input pl-12 text-xl font-mono font-bold" required>
                                     </div>
-                                    <input type="number" id="inputAmount" placeholder="0"
-                                        class="ui-input pl-12 text-xl font-mono font-bold" required>
+                                    <div class="col-span-5 hidden" id="adminFeeContainer">
+                                        <div class="relative group">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-xs text-zinc-500 font-bold">Adm</span>
+                                            </div>
+                                            <input type="number" id="inputAdmin" placeholder="0"
+                                                class="ui-input pl-10 text-sm font-mono font-bold bg-rose-500/10 border-rose-500/30 text-rose-300">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -203,11 +299,19 @@
                                     <input type="date" id="inputDate" onclick="this.showPicker()"
                                         class="ui-input cursor-pointer">
                                 </div>
-                                <div>
-                                    <label class="text-xs font-bold text-zinc-400 uppercase ml-1 mb-1.5 block">Sumber
-                                        Dana</label>
+                                <div id="sourceContainer">
+                                    <label class="text-xs font-bold text-zinc-400 uppercase ml-1 mb-1.5 block"
+                                        id="labelSource">Sumber Dana</label>
                                     <select id="inputSource" class="ui-input appearance-none cursor-pointer"></select>
                                 </div>
+                            </div>
+
+                            <div class="hidden" id="destContainer">
+                                <label
+                                    class="text-xs font-bold text-zinc-400 uppercase ml-1 mb-1.5 block text-blue-400">Ke
+                                    Dompet (Tujuan)</label>
+                                <select id="inputDest"
+                                    class="ui-input appearance-none cursor-pointer border-blue-500/30 bg-blue-500/5"></select>
                             </div>
 
                             <div>
@@ -218,13 +322,15 @@
                                     <input type="text" id="inputDesc" placeholder="Keperluan?"
                                         class="w-full bg-transparent text-sm text-white px-4 h-12 border-b border-zinc-700 focus:outline-none placeholder-zinc-600 font-medium"
                                         required>
-                                    <div class="flex border-b border-zinc-700 h-10">
+
+                                    <div class="flex border-b border-zinc-700 h-10" id="categoryContainer">
                                         <div
                                             class="px-3 bg-zinc-800/50 border-r border-zinc-700 text-[10px] text-zinc-400 font-bold uppercase flex items-center">
                                             Kategori</div>
                                         <select id="inputCategory"
                                             class="w-full h-full bg-transparent text-xs text-zinc-300 px-3 appearance-none focus:outline-none cursor-pointer hover:bg-zinc-800 transition"></select>
                                     </div>
+
                                     <input type="text" id="inputNotes" placeholder="Catatan (Opsional)"
                                         class="w-full h-10 bg-zinc-900/30 text-xs text-zinc-400 px-4 italic focus:outline-none placeholder-zinc-700">
                                 </div>
@@ -265,7 +371,6 @@
                                     </div>
                                     <div id="managePresetList" class="max-h-24 overflow-y-auto pr-1 space-y-1"></div>
                                 </div>
-
                                 <button onclick="resetAllData()"
                                     class="btn-sm w-full text-rose-400 border border-rose-900/50 hover:bg-rose-900/20 mt-2">HAPUS
                                     SEMUA DATA</button>
@@ -291,7 +396,6 @@
         </div>
 
         <div class="lg:col-span-3 h-full flex flex-col gap-4 overflow-hidden order-1 lg:order-3">
-
             <div onclick="resetFilter()"
                 class="relative overflow-hidden rounded-2xl p-6 cursor-pointer group shadow-xl border border-white/5 bg-[#27272a] shrink-0">
                 <div
@@ -307,7 +411,7 @@
                             <div class="text-base font-bold text-white font-mono" id="totalIncome">0</div>
                         </div>
                         <div class="bg-black/20 rounded-lg p-3 border border-white/5">
-                            <div class="text-xs text-rose-400 uppercase font-bold opacity-80 mb-1">Keluar</div>
+                            <div class="text-xs text-rose-400 uppercase font-bold opacity-80 mb-1">Keluar (+Adm)</div>
                             <div class="text-base font-bold text-white font-mono" id="totalExpense">0</div>
                         </div>
                     </div>
@@ -408,13 +512,20 @@
         }
 
         function updateStatus() {
-            const statusEl = document.getElementById('statusIndicator');
             const totalEl = document.getElementById('totalBalance');
             const incEl = document.getElementById('totalIncome');
             const expEl = document.getElementById('totalExpense');
 
             let inc = 0, exp = 0;
-            appState.transactions.forEach(t => { inc += Number(t.income || 0); exp += Number(t.expense || 0); });
+            appState.transactions.forEach(t => {
+                if (t.type === 'transfer') {
+                    // Transfer tidak menambah/mengurangi total aset KECUALI biaya admin
+                    exp += Number(t.admin || 0);
+                } else {
+                    inc += Number(t.income || 0);
+                    exp += Number(t.expense || 0);
+                }
+            });
 
             totalEl.innerText = formatRupiah(inc - exp);
             incEl.innerText = formatRupiah(inc);
@@ -435,8 +546,7 @@
                 const year = viewDate.getFullYear();
                 const month = String(viewDate.getMonth() + 1).padStart(2, '0');
                 const d = String(day).padStart(2, '0');
-                const dateString = `${year}-${month}-${d}`;
-                document.getElementById('inputDate').value = dateString;
+                document.getElementById('inputDate').value = `${year}-${month}-${d}`;
             } else {
                 document.getElementById('inputDate').valueAsDate = new Date();
             }
@@ -460,13 +570,19 @@
 
             const dailyData = {}; let monthExp = 0;
             appState.transactions.forEach(t => {
-                if (activeSourceFilter && t.source !== activeSourceFilter) return;
+                if (activeSourceFilter && (t.source !== activeSourceFilter && t.destination !== activeSourceFilter)) return;
                 const tDate = new Date(t.date);
                 if (tDate.getFullYear() === year && tDate.getMonth() === month) {
                     const d = tDate.getDate();
-                    if (!dailyData[d]) dailyData[d] = { hasInc: false, hasExp: false };
-                    if (Number(t.income) > 0) dailyData[d].hasInc = true;
-                    if (Number(t.expense) > 0) { dailyData[d].hasExp = true; monthExp += Number(t.expense); }
+                    if (!dailyData[d]) dailyData[d] = { hasInc: false, hasExp: false, hasTrf: false };
+
+                    if (t.type === 'transfer') {
+                        dailyData[d].hasTrf = true;
+                        if (Number(t.admin) > 0) monthExp += Number(t.admin);
+                    } else {
+                        if (Number(t.income) > 0) dailyData[d].hasInc = true;
+                        if (Number(t.expense) > 0) { dailyData[d].hasExp = true; monthExp += Number(t.expense); }
+                    }
                 }
             });
             summary.innerText = `Keluar: ${nFmt(monthExp)}`;
@@ -484,6 +600,7 @@
                     dotsHtml += `<div class="dot-container">`;
                     if (dailyData[day].hasInc) dotsHtml += `<div class="dot bg-emerald-500"></div>`;
                     if (dailyData[day].hasExp) dotsHtml += `<div class="dot bg-rose-500"></div>`;
+                    if (dailyData[day].hasTrf) dotsHtml += `<div class="dot bg-blue-500"></div>`;
                     dotsHtml += `</div>`;
                 }
                 cell.innerHTML = `<span>${day}</span>${dotsHtml}`;
@@ -497,17 +614,34 @@
             const searchText = document.getElementById('searchInput').value.toLowerCase();
             const year = viewDate.getFullYear(), month = viewDate.getMonth();
 
+            // Calculate Opening Balance (Approximate)
             let openingBalanceCutoff = selectedSpecificDate ? new Date(year, month, selectedSpecificDate) : new Date(year, month, 1);
             let openingBalance = appState.transactions.reduce((acc, t) => {
-                if (activeSourceFilter && t.source !== activeSourceFilter) return acc;
+                if (activeSourceFilter && (t.source !== activeSourceFilter && t.destination !== activeSourceFilter)) return acc;
+
                 const tDate = new Date(t.date);
-                if (tDate < openingBalanceCutoff) return acc + (Number(t.income || 0) - Number(t.expense || 0));
+                if (tDate < openingBalanceCutoff) {
+
+                    if (t.type === 'transfer') {
+                        if (activeSourceFilter) {
+                            if (t.source === activeSourceFilter) return acc - Number(t.amount) - Number(t.admin);
+                            if (t.destination === activeSourceFilter) return acc + Number(t.amount);
+                            return acc;
+                        }
+                        return acc - Number(t.admin);
+                    }
+
+                    // 🔥 INI YANG HILANG
+                    return acc + Number(t.income || 0) - Number(t.expense || 0);
+                }
+
                 return acc;
             }, 0);
 
+
             let filtered = appState.transactions.filter(t => {
-                if (activeSourceFilter && t.source !== activeSourceFilter) return false;
-                if (searchText !== '') return t.desc.toLowerCase().includes(searchText) || t.category.toLowerCase().includes(searchText) || t.source.toLowerCase().includes(searchText);
+                if (activeSourceFilter && (t.source !== activeSourceFilter && t.destination !== activeSourceFilter)) return false;
+                if (searchText !== '') return t.desc.toLowerCase().includes(searchText) || (t.category && t.category.toLowerCase().includes(searchText)) || t.source.toLowerCase().includes(searchText) || (t.destination && t.destination.toLowerCase().includes(searchText));
                 const tDate = new Date(t.date);
                 if (selectedSpecificDate) return tDate.getDate() === selectedSpecificDate && tDate.getMonth() === month && tDate.getFullYear() === year;
                 else return tDate.getMonth() === month && tDate.getFullYear() === year;
@@ -549,42 +683,50 @@
 
             Object.keys(groups).forEach(date => {
                 if (!selectedSpecificDate) {
-                    const dInc = groups[date].reduce((s, t) => s + Number(t.income || 0), 0);
-                    const dExp = groups[date].reduce((s, t) => s + Number(t.expense || 0), 0);
                     html += `
                     <div class="sticky top-0 z-20 bg-[#18181b]/95 backdrop-blur-md border-b border-zinc-800 py-3 mb-2 mt-4 flex justify-between items-end">
                         <span class="font-bold text-zinc-300 text-sm pl-1">${formatDateFriendly(date)}</span>
-                        <div class="text-xs font-mono font-medium opacity-90 pr-1">
-                            ${dInc > 0 ? `<span class="text-emerald-400">+${nFmt(dInc)}</span>` : ''}
-                            ${dExp > 0 ? `<span class="text-rose-400 ml-3">-${nFmt(dExp)}</span>` : ''}
-                        </div>
                     </div>`;
                 }
 
                 groups[date].forEach(t => {
-                    const isExp = Number(t.expense) > 0;
-                    const amount = isExp ? t.expense : t.income;
-                    const colorClass = isExp ? 'text-rose-400' : 'text-emerald-400';
-                    const iconBg = isExp ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+                    // Logic Rendering Card
+                    let icon, iconBg, colorClass, amountDisplay, subText;
+
+                    if (t.type === 'transfer') {
+                        icon = '⇄';
+                        iconBg = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+                        colorClass = 'text-white';
+                        amountDisplay = nFmt(t.amount);
+                        subText = `<span class="text-blue-300 font-bold">${t.source}</span> <span class="text-zinc-500">➔</span> <span class="text-blue-300 font-bold">${t.destination}</span>`;
+                        if (Number(t.admin) > 0) subText += ` <span class="text-rose-400 text-[10px] ml-1">(Adm: ${nFmt(t.admin)})</span>`;
+                    } else {
+                        const isExp = Number(t.expense) > 0;
+                        icon = isExp ? '↓' : '↑';
+                        iconBg = isExp ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+                        colorClass = isExp ? 'text-rose-400' : 'text-emerald-400';
+                        amountDisplay = formatRupiah(isExp ? t.expense : t.income);
+                        subText = `<span class="bg-zinc-800 px-2 py-0.5 rounded text-zinc-300 border border-zinc-700">${t.category}</span>
+                                   <span>•</span>
+                                   <span class="text-indigo-300 font-medium">${t.source}</span>`;
+                    }
 
                     html += `
                     <div class="group relative bg-[#27272a] hover:bg-zinc-800 border border-zinc-700/50 hover:border-zinc-600 p-4 rounded-xl transition-all mb-3 flex items-center justify-between overflow-hidden shadow-sm hover:shadow-md">
                         <div class="flex items-start gap-4 min-w-0">
                             <div class="w-10 h-10 rounded-xl ${iconBg} border flex items-center justify-center shrink-0 text-base font-bold">
-                                ${isExp ? '↓' : '↑'}
+                                ${icon}
                             </div>
                             <div class="flex flex-col min-w-0">
                                 <span class="font-bold text-white text-base truncate pr-2 leading-snug">${t.desc}</span>
                                 <div class="flex items-center gap-2 text-xs text-zinc-400 mt-1">
-                                    <span class="bg-zinc-800 px-2 py-0.5 rounded text-zinc-300 border border-zinc-700">${t.category}</span>
-                                    <span>•</span>
-                                    <span class="text-indigo-300 font-medium">${t.source}</span>
+                                    ${subText}
                                 </div>
                                 ${t.notes ? `<div class="text-xs text-zinc-500 italic mt-1.5 border-l-2 border-zinc-700 pl-2 truncate max-w-[200px]">"${t.notes}"</div>` : ''}
                             </div>
                         </div>
                         <div class="text-right shrink-0 z-10 pl-3 flex flex-col items-end justify-center">
-                            <div class="font-mono font-bold text-base ${colorClass}">${formatRupiah(amount)}</div>
+                            <div class="font-mono font-bold text-base ${colorClass}">${amountDisplay}</div>
                             <button onclick="deleteItem(${t.id})" class="text-[10px] text-zinc-500 hover:text-rose-500 font-bold uppercase tracking-wider transition opacity-0 group-hover:opacity-100 py-1 mt-1">Hapus</button>
                         </div>
                     </div>`;
@@ -610,7 +752,21 @@
         function renderWallets() {
             const container = document.getElementById('walletList'); container.innerHTML = '';
             let balances = {}; appState.sources.forEach(s => balances[s] = 0);
-            appState.transactions.forEach(t => { if (!balances[t.source]) balances[t.source] = 0; balances[t.source] += (Number(t.income || 0) - Number(t.expense || 0)); });
+
+            appState.transactions.forEach(t => {
+                if (!(t.source in balances)) balances[t.source] = 0;
+
+                if (t.type === 'transfer') {
+                    // Source berkurang (Amount + Admin)
+                    balances[t.source] -= (Number(t.amount) + Number(t.admin));
+                    // Destination bertambah (Amount)
+                    if (!(t.destination in balances)) balances[t.destination] = 0;
+
+                    balances[t.destination] += Number(t.amount);
+                } else {
+                    balances[t.source] += (Number(t.income || 0) - Number(t.expense || 0));
+                }
+            });
 
             Object.entries(balances).sort((a, b) => b[1] - a[1]).forEach(([src, amt]) => {
                 const ast = getWalletAssets(src);
@@ -639,39 +795,101 @@
             const slider = document.getElementById('typeSlider');
             const btnExp = document.getElementById('btnExp');
             const btnInc = document.getElementById('btnInc');
+            const btnTrf = document.getElementById('btnTrf');
             const submitBtn = document.getElementById('submitBtn');
+
+            // Containers
+            const destContainer = document.getElementById('destContainer');
+            const adminFeeContainer = document.getElementById('adminFeeContainer');
+            const amountContainer = document.getElementById('amountContainer');
+            const categoryContainer = document.getElementById('categoryContainer');
+            const labelSource = document.getElementById('labelSource');
+
+            // Reset Styles
+            btnExp.className = "relative z-10 text-[10px] lg:text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-colors";
+            btnInc.className = "relative z-10 text-[10px] lg:text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-colors";
+            btnTrf.className = "relative z-10 text-[10px] lg:text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-colors";
 
             if (t === 'expense') {
                 slider.style.transform = 'translateX(0)';
-                slider.className = "absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-rose-500/20 border border-rose-500/50 rounded-lg shadow-[0_0_15px_rgba(244,63,94,0.3)] transition-all duration-300";
-                btnExp.className = "relative z-10 text-xs font-bold text-rose-400 transition-colors";
-                btnInc.className = "relative z-10 text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-colors";
+                slider.className = "absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-rose-500/20 border border-rose-500/50 rounded-lg shadow-[0_0_15px_rgba(244,63,94,0.3)] transition-all duration-300";
+                btnExp.className = "relative z-10 text-[10px] lg:text-xs font-bold text-rose-400 transition-colors";
+
                 submitBtn.className = "btn-primary w-full bg-rose-600 hover:bg-rose-500 text-white shadow-rose-900/20";
                 submitBtn.innerText = "SIMPAN PENGELUARAN";
-            } else {
+
+                // Visibility
+                destContainer.classList.add('hidden');
+                adminFeeContainer.classList.add('hidden');
+                amountContainer.classList.remove('col-span-7');
+                amountContainer.classList.add('col-span-12');
+                categoryContainer.classList.remove('hidden');
+                labelSource.innerText = "Sumber Dana";
+
+            } else if (t === 'income') {
                 slider.style.transform = 'translateX(100%)';
-                slider.className = "absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-emerald-500/20 border border-emerald-500/50 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-300";
-                btnExp.className = "relative z-10 text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-colors";
-                btnInc.className = "relative z-10 text-xs font-bold text-emerald-400 transition-colors";
+                slider.className = "absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-emerald-500/20 border border-emerald-500/50 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-300";
+                btnInc.className = "relative z-10 text-[10px] lg:text-xs font-bold text-emerald-400 transition-colors";
+
                 submitBtn.className = "btn-primary w-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/20";
                 submitBtn.innerText = "SIMPAN PEMASUKAN";
+
+                // Visibility
+                destContainer.classList.add('hidden');
+                adminFeeContainer.classList.add('hidden');
+                amountContainer.classList.remove('col-span-7');
+                amountContainer.classList.add('col-span-12');
+                categoryContainer.classList.remove('hidden');
+                labelSource.innerText = "Masuk Ke";
+
+            } else { // Transfer
+                slider.style.transform = 'translateX(200%)';
+                slider.className = "absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-blue-500/20 border border-blue-500/50 rounded-lg shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all duration-300";
+                btnTrf.className = "relative z-10 text-[10px] lg:text-xs font-bold text-blue-400 transition-colors";
+
+                submitBtn.className = "btn-primary w-full bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20";
+                submitBtn.innerText = "PROSES TRANSFER";
+
+                // Visibility
+                destContainer.classList.remove('hidden');
+                adminFeeContainer.classList.remove('hidden');
+                amountContainer.classList.remove('col-span-12');
+                amountContainer.classList.add('col-span-7');
+                categoryContainer.classList.add('hidden'); // Sembunyikan kategori saat transfer
+                labelSource.innerText = "Dari Dompet";
+
+                // Auto set destination to Tunai if possible
+                const destOpts = document.getElementById('inputDest').options;
+                for (let i = 0; i < destOpts.length; i++) {
+                    if (destOpts[i].value.toLowerCase().includes('tunai')) {
+                        document.getElementById('inputDest').selectedIndex = i;
+                        break;
+                    }
+                }
             }
         }
 
         // --- DATA MANAGEMENT ---
         function toggleSourceFilter(s) { activeSourceFilter = (activeSourceFilter === s) ? null : s; document.getElementById('searchInput').value = ''; renderAll(); }
+
         function renderOptions() {
-            const c = document.getElementById('inputCategory'), s = document.getElementById('inputSource');
-            const vc = c.value, vs = s.value;
-            c.innerHTML = appState.categories.map(x => `<option value="${x}">${x}</option>`).join('');
-            s.innerHTML = appState.sources.map(x => `<option value="${x}">${x}</option>`).join('');
-            if (vc) c.value = vc; if (vs) s.value = vs;
+            const c = document.getElementById('inputCategory'), s = document.getElementById('inputSource'), d = document.getElementById('inputDest');
+            const vc = c.value, vs = s.value, vd = d.value;
+
+            const catHtml = appState.categories.map(x => `<option value="${x}">${x}</option>`).join('');
+            const srcHtml = appState.sources.map(x => `<option value="${x}">${x}</option>`).join('');
+
+            c.innerHTML = catHtml;
+            s.innerHTML = srcHtml;
+            d.innerHTML = srcHtml; // Destination same as Source list
+
+            if (vc) c.value = vc; if (vs) s.value = vs; if (vd) d.value = vd;
         }
 
         function renderPresets() {
             const c = document.getElementById('presetContainer'); c.innerHTML = '';
             appState.presets.forEach(p => {
-                const isExp = p.type !== 'income';
+                const isExp = p.type === 'expense';
                 const b = document.createElement('button');
                 b.className = `px-3 py-1.5 rounded-lg text-xs font-bold border transition-all hover:-translate-y-0.5 shadow-sm ${isExp ? 'bg-rose-500/10 border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/40' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/40'}`;
                 b.innerHTML = `${p.label}`;
@@ -708,11 +926,11 @@
                     <span class="truncate text-xs text-zinc-300 font-medium">${x}</span>
                     <button onclick="delOpt('${t}',${i})" class="text-zinc-500 hover:text-rose-400 font-bold px-2 text-sm">×</button>
                 </div>`).join('');
-            
+
             document.getElementById('manageCategoryList').innerHTML = l(appState.categories, 'category');
             document.getElementById('manageSourceList').innerHTML = l(appState.sources, 'source');
 
-            // Preset (Update terbaru untuk menampilkan rincian)
+            // Preset
             const presetHtml = appState.presets.map((p, i) => `
                 <div class="flex justify-between items-center bg-zinc-800 px-2 py-1.5 rounded border border-zinc-700 mb-1">
                     <div class="flex flex-col overflow-hidden">
@@ -745,11 +963,94 @@
         function nFmt(n) { return new Intl.NumberFormat('id-ID').format(n); }
         function formatDateFriendly(d) { const D = new Date(d), N = new Date(); if (D.toDateString() === N.toDateString()) return "Hari Ini"; return D.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' }); }
 
-        // CSV
-        function handleCSVSelect(inp) { const f = inp.files[0]; if (!f) return; const r = new FileReader(); r.onload = (e) => { const l = e.target.result.split('\n'), nT = []; for (let i = 1; i < l.length; i++) { const x = l[i].trim(); if (!x) continue; const c = x.split(','); if (c.length >= 6) nT.push({ id: Date.now() + i, date: c[0], desc: c[1].replace(/"/g, ''), category: c[2], expense: Number(c[3]), income: Number(c[4]), source: c[5], notes: c[6] ? c[6].replace(/"/g, '') : '' }); } if (confirm(`Impor ${nT.length} transaksi?`)) { appState.transactions = nT; saveData(); } }; r.readAsText(f); }
-        function downloadCSV() { const c = "Date,Desc,Category,Expense,Income,Source,Notes\n" + appState.transactions.map(t => `${t.date},"${t.desc}",${t.category},${t.expense},${t.income},${t.source},"${t.notes}"`).join("\n"); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([c], { type: 'text/csv' })); a.download = `data_keuangan_${new Date().toISOString().slice(0, 10)}.csv`; a.click(); }
+        // CSV (UPDATED FOR TRANSFER)
+        function handleCSVSelect(inp) {
+            const f = inp.files[0];
+            if (!f) return;
 
-        document.getElementById('trxForm').addEventListener('submit', (e) => { e.preventDefault(); const t = document.getElementById('inputType').value, a = Number(document.getElementById('inputAmount').value); appState.transactions.push({ id: Date.now(), date: document.getElementById('inputDate').value, desc: document.getElementById('inputDesc').value, category: document.getElementById('inputCategory').value, source: document.getElementById('inputSource').value, expense: t === 'expense' ? a : 0, income: t === 'income' ? a : 0, notes: document.getElementById('inputNotes').value }); saveData(); resetForm(); });
+            const r = new FileReader();
+            r.onload = (e) => {
+                const rows = e.target.result.split(/\r?\n/);
+                const headers = rows.shift();
+                const newTrx = [];
+
+                rows.forEach((row, i) => {
+                    if (!row.trim()) return;
+
+                    const c = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                    if (!c || c.length < 6) return;
+
+                    const exp = Number(c[3]) || 0;
+                    const inc = Number(c[4]) || 0;
+
+                    newTrx.push({
+                        id: Date.now() + i,
+                        date: c[0],
+                        desc: c[1].replace(/"/g, ''),
+                        category: c[2],
+                        expense: exp,
+                        income: inc,
+                        amount: c[7] === 'transfer' ? (exp || inc) : 0,
+                        source: c[5],
+                        notes: c[6] ? c[6].replace(/"/g, '') : '',
+                        type: c[7] || (Number(c[3]) > 0 ? 'expense' : 'income'),
+                        destination: c[8] || '',
+                        admin: Number(c[9]) || 0
+                    });
+                });
+
+                if (confirm(`Impor ${newTrx.length} transaksi?`)) {
+                    appState.transactions = newTrx;
+                    saveData();
+                }
+            };
+            r.readAsText(f);
+        }
+
+
+        function downloadCSV() {
+            const c = "Date,Desc,Category,Expense,Income,Source,Notes,Type,Destination,Admin\n" +
+                appState.transactions.map(t => `${t.date},"${t.desc}",${t.category},${t.expense},${t.income},${t.source},"${t.notes}",${t.type || (t.expense > 0 ? 'expense' : 'income')},${t.destination || ''},${t.admin || 0}`).join("\n");
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([c], { type: 'text/csv' })); a.download = `data_keuangan_${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+        }
+
+        document.getElementById('trxForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const t = document.getElementById('inputType').value;
+            const a = Number(document.getElementById('inputAmount').value);
+            if (!Number.isFinite(a) || a <= 0) {
+                return alert("Nominal harus lebih dari 0");
+            }
+            const adminInput = document.getElementById('inputAdmin').value;
+            const admin = adminInput ? Number(adminInput) : 0;
+
+            // Validasi Transfer
+            if (t === 'transfer' && document.getElementById('inputSource').value === document.getElementById('inputDest').value) {
+                return alert("Dompet Asal dan Tujuan tidak boleh sama!");
+            }
+            const dateVal =
+                document.getElementById('inputDate').value ||
+                new Date().toISOString().slice(0, 10);
+
+
+            appState.transactions.push({
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                date: dateVal,
+                desc: document.getElementById('inputDesc').value,
+                category: t === 'transfer' ? 'Transfer' : document.getElementById('inputCategory').value,
+                source: document.getElementById('inputSource').value,
+                destination: t === 'transfer' ? document.getElementById('inputDest').value : '',
+                expense: t === 'expense' ? a : 0,
+                income: t === 'income' ? a : 0,
+                amount: t === 'transfer' ? a : 0, // Store pure amount for transfer
+                admin: t === 'transfer' ? admin : 0,
+                type: t,
+                notes: document.getElementById('inputNotes').value
+            });
+            saveData();
+            resetForm();
+        });
+
         document.getElementById('inputDate').valueAsDate = new Date();
         renderAll();
     </script>
