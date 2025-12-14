@@ -334,6 +334,7 @@
                                 <span class="group-open:rotate-180 transition-transform">▼</span>
                             </summary>
                             <div class="mt-2 space-y-3 bg-[#18181b] p-3 rounded-xl border border-zinc-700">
+
                                 <div>
                                     <div class="flex justify-between mb-1"><span
                                             class="text-xs text-zinc-500">Kategori</span> <button
@@ -341,6 +342,7 @@
                                             class="text-xs text-indigo-400 hover:text-indigo-300">+ Baru</button></div>
                                     <div id="manageCategoryList" class="max-h-24 overflow-y-auto pr-1 space-y-1"></div>
                                 </div>
+
                                 <div>
                                     <div class="flex justify-between mb-1"><span
                                             class="text-xs text-zinc-500">Dompet</span> <button
@@ -348,6 +350,14 @@
                                             class="text-xs text-indigo-400 hover:text-indigo-300">+ Baru</button></div>
                                     <div id="manageSourceList" class="max-h-24 overflow-y-auto pr-1 space-y-1"></div>
                                 </div>
+
+                                <div class="border-t border-zinc-800 pt-2">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-xs text-zinc-500">Preset Tersimpan</span>
+                                    </div>
+                                    <div id="managePresetList" class="max-h-24 overflow-y-auto pr-1 space-y-1"></div>
+                                </div>
+
                                 <button onclick="resetAllData()"
                                     class="btn-sm w-full text-rose-400 border border-rose-900/50 hover:bg-rose-900/20 mt-2">HAPUS
                                     SEMUA DATA</button>
@@ -783,10 +793,39 @@
             if (l) { appState.presets.push({ label: l, desc: d, amount: fa, category: c, source: s, type: t }); saveData(); }
         }
 
+        // Ganti fungsi renderManageLists yang lama dengan yang ini:
         function renderManageLists() {
-            const l = (arr, t) => arr.map((x, i) => `<div class="flex justify-between items-center bg-zinc-800 px-2 py-1.5 rounded border border-zinc-700 mb-1"><span class="truncate text-xs text-zinc-300 font-medium">${x}</span><button onclick="delOpt('${t}',${i})" class="text-zinc-500 hover:text-rose-400 font-bold px-2 text-sm">×</button></div>`).join('');
+            // 1. Render Kategori & Source (Logika lama untuk string)
+            const l = (arr, t) => arr.map((x, i) => `
+                <div class="flex justify-between items-center bg-zinc-800 px-2 py-1.5 rounded border border-zinc-700 mb-1">
+                    <span class="truncate text-xs text-zinc-300 font-medium">${x}</span>
+                    <button onclick="delOpt('${t}',${i})" class="text-zinc-500 hover:text-rose-400 font-bold px-2 text-sm">×</button>
+                </div>`).join('');
+
             document.getElementById('manageCategoryList').innerHTML = l(appState.categories, 'category');
             document.getElementById('manageSourceList').innerHTML = l(appState.sources, 'source');
+
+            // 2. Render Preset (Logika BARU untuk object)
+            // Karena preset bentuknya object {label, amount, dll}, kita ambil label-nya saja
+            const presetHtml = appState.presets.map((p, i) => `
+                <div class="flex justify-between items-center bg-zinc-800 px-2 py-1.5 rounded border border-zinc-700 mb-1">
+                    <div class="flex flex-col overflow-hidden">
+                        <span class="truncate text-xs text-zinc-300 font-bold">${p.label}</span>
+                        <span class="truncate text-[10px] text-zinc-500">${p.desc} (${nFmt(p.amount)})</span>
+                    </div>
+                    <button onclick="deletePreset(${i})" class="text-zinc-500 hover:text-rose-400 font-bold px-2 text-sm shrink-0 ml-2">×</button>
+                </div>
+            `).join('');
+
+            document.getElementById('managePresetList').innerHTML = presetHtml || '<div class="text-[10px] text-zinc-600 italic p-1">Belum ada preset</div>';
+        }
+
+        // Tambahkan fungsi baru ini di bawah fungsi delOpt:
+        function deletePreset(index) {
+            if (confirm("Hapus preset ini selamanya?")) {
+                appState.presets.splice(index, 1); // Hapus dari array
+                saveData(); // Simpan ke localStorage & render ulang
+            }
         }
 
         function addNewOption(t) { const n = prompt("Nama Baru:"); if (n) { (t === 'category' ? appState.categories : appState.sources).push(n); saveData(); } }
