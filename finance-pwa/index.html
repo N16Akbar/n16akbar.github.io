@@ -1,609 +1,325 @@
-<!DOCTYPE html>
-<html lang="id">
-
+<!doctype html>
+<html lang=id>
 <head>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#09090b">
-    <link rel="apple-touch-icon" href="icon.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Money Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        bg: '#09090b',
-                        card: '#18181b',
-                        border: '#27272a',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #09090b;
-            color: #e4e4e7;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-size: 14px;
-        }
-
-        .custom-scroll::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .custom-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background-color: #3f3f46;
-            border-radius: 10px;
-        }
-
-        .ui-card {
-            background-color: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        /* INPUT STYLES */
-        .ui-input-base {
-            width: 100%;
-            height: 48px;
-            background-color: #09090b;
-            border: 1px solid #27272a;
-            border-radius: 12px;
-            padding: 0 16px;
-            color: #fff;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .ui-input-base:focus {
-            outline: none;
-            border-color: #6366f1;
-            background-color: #09090b;
-        }
-
-        select.ui-input-base {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2371717a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-        }
-
-        /* CALENDAR STYLES REVISED */
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 2px;
-        }
-
-        .cal-cell {
-            position: relative;
-            height: 36px;
-            /* Fixed Height */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9999px;
-            /* Circle */
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #71717a;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .cal-cell:hover {
-            background-color: #27272a;
-            color: white;
-        }
-
-        /* Hari Ini (Tanpa select) */
-        .cal-cell.today:not(.active) {
-            color: #818cf8;
-            font-weight: 800;
-            background-color: #1e1b4b;
-            border-color: #312e81;
-        }
-
-        /* Selected Date */
-        .cal-cell.active {
-            background-color: #6366f1;
-            color: white;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-            border-color: transparent;
-        }
-
-        /* Dots Indicator */
-        .dot-wrapper {
-            position: absolute;
-            bottom: 4px;
-            display: flex;
-            gap: 2px;
-        }
-
-        .dot {
-            width: 3px;
-            height: 3px;
-            border-radius: 50%;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-slide-in {
-            animation: slideIn 0.3s ease-out forwards;
-        }
-    </style>
+<link rel=manifest href=manifest.json />
+<meta name=theme-color content=#09090b />
+<link rel=apple-touch-icon href=icon.png />
+<meta charset=UTF-8 />
+<meta name=viewport content="width=device-width, initial-scale=1.0" />
+<title>Money Tracker</title>
+<script src=https://cdn.tailwindcss.com></script>
+<script src=https://cdn.jsdelivr.net/npm/chart.js></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel=stylesheet />
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['"Plus Jakarta Sans"',"sans-serif"],mono:['"JetBrains Mono"',"monospace"],},colors:{bg:"#09090b",card:"#18181b",border:"#27272a",},},},};</script>
+<style>body{background-color:#09090b;color:#e4e4e7;overflow:hidden;height:100vh;display:flex;flex-direction:column;font-size:14px}.custom-scroll::-webkit-scrollbar{width:5px}.custom-scroll::-webkit-scrollbar-track{background:transparent}.custom-scroll::-webkit-scrollbar-thumb{background-color:#3f3f46;border-radius:10px}.ui-card{background-color:#18181b;border:1px solid #27272a;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);overflow:hidden}.ui-input-base{width:100%;height:48px;background-color:#09090b;border:1px solid #27272a;border-radius:12px;padding:0 16px;color:#fff;font-size:.9rem;font-weight:500;transition:all .2s ease;display:flex;align-items:center}.ui-input-base:focus{outline:0;border-color:#6366f1;background-color:#09090b}select.ui-input-base{appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2371717a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right .5rem center;background-repeat:no-repeat;background-size:1.5em 1.5em}.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}.cal-cell{position:relative;height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:9999px;font-size:.8rem;font-weight:600;cursor:pointer;color:#71717a;transition:all .2s;border:1px solid transparent}.cal-cell:hover{background-color:#27272a;color:white}.cal-cell.today:not(.active){color:#818cf8;font-weight:800;background-color:#1e1b4b;border-color:#312e81}.cal-cell.active{background-color:#6366f1;color:white;box-shadow:0 4px 12px rgba(99,102,241,0.4);border-color:transparent}.dot-wrapper{position:absolute;bottom:4px;display:flex;gap:2px}.dot{width:3px;height:3px;border-radius:50%}@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.animate-slide-in{animation:slideIn .3s ease-out forwards}</style>
 </head>
-
 <body class="p-3 lg:p-6 w-full max-w-[1600px] mx-auto">
-
-    <header class="flex-shrink-0 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="flex items-center gap-4">
-            <div
-                class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-bold text-xl">
-                ✨</div>
-            <div>
-                <h1 class="text-xl font-bold text-white tracking-tight">Dompet<span class="text-indigo-400">AI</span>
-                </h1>
-                <p class="text-xs text-zinc-400 font-medium">Catatan Pengeluaran Harian</p>
-            </div>
-        </div>
-        <div class="flex gap-2 w-full md:w-auto">
-            <label
-                class="flex-1 md:flex-none h-10 px-4 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white text-xs font-bold cursor-pointer flex items-center justify-center gap-2 transition">
-                📂 Import CSV <input type="file" id="csvFileInput" class="hidden" accept=".csv"
-                    onchange="handleCSVSelect(this)">
-            </label>
-            <button onclick="downloadCSV()"
-                class="flex-1 md:flex-none h-10 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 transition">
-                💾 Export Data
-            </button>
-        </div>
-    </header>
-
-    <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-6 pb-2">
-
-        <div class="lg:col-span-3 h-full flex flex-col min-h-0 order-2 lg:order-1">
-            <div class="ui-card h-full flex flex-col relative bg-card">
-                <div
-                    class="p-4 border-b border-zinc-800 bg-zinc-900/50 flex justify-between items-center backdrop-blur-sm sticky top-0 z-10">
-                    <h3 class="font-bold text-zinc-300 text-sm uppercase tracking-wider">📝 Input Transaksi</h3>
-                    <button onclick="resetForm()"
-                        class="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition">RESET</button>
-                </div>
-
-                <div class="p-4 overflow-y-auto custom-scroll flex-1">
-                    <form id="trxForm" class="space-y-4">
-                        <div
-                            class="bg-zinc-950 p-1 rounded-xl border border-zinc-800 relative h-10 grid grid-cols-3 gap-1">
-                            <div id="typeSlider"
-                                class="absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-zinc-800 rounded-lg shadow-sm transition-all duration-300 border border-zinc-700">
-                            </div>
-                            <button type="button" onclick="setTransactionType('expense')" id="btnExp"
-                                class="relative z-10 text-[10px] font-bold text-zinc-400 transition-colors hover:text-white">KELUAR</button>
-                            <button type="button" onclick="setTransactionType('income')" id="btnInc"
-                                class="relative z-10 text-[10px] font-bold text-zinc-400 transition-colors hover:text-white">MASUK</button>
-                            <button type="button" onclick="setTransactionType('transfer')" id="btnTrf"
-                                class="relative z-10 text-[10px] font-bold text-zinc-400 transition-colors hover:text-white">TF
-                                / ATM</button>
-                            <input type="hidden" id="inputType" value="expense">
-                        </div>
-
-                        <div class="flex flex-wrap gap-2" id="presetContainer"></div>
-
-                        <div class="space-y-4 pt-2">
-                            <div>
-                                <label class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block">Total
-                                    Nominal <span class="text-rose-500">*</span></label>
-                                <div class="grid grid-cols-12 gap-2">
-                                    <div class="col-span-12 relative" id="amountContainer">
-                                        <div
-                                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 font-bold">
-                                            Rp</div>
-                                        <input type="number" id="inputAmount" placeholder="0"
-                                            class="ui-input-base pl-10 text-lg font-mono font-bold text-white placeholder-zinc-700"
-                                            required>
-                                    </div>
-                                    <div class="col-span-5 hidden" id="adminFeeContainer">
-                                        <div class="relative">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[10px] text-zinc-500 font-bold uppercase">
-                                                Adm</div>
-                                            <input type="number" id="inputAdmin" placeholder="0"
-                                                class="ui-input-base pl-11 text-sm font-mono text-rose-300 bg-rose-500/5 border-rose-500/20">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label
-                                        class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block">Tanggal</label>
-                                    <input type="date" id="inputDate" class="ui-input-base text-sm cursor-pointer"
-                                        onclick="this.showPicker()">
-                                </div>
-                                <div id="sourceContainer">
-                                    <label class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block"
-                                        id="labelSource">Sumber</label>
-                                    <select id="inputSource" class="ui-input-base text-sm cursor-pointer"></select>
-                                </div>
-                            </div>
-
-                            <div class="hidden" id="destContainer">
-                                <label class="text-[11px] font-bold text-blue-400 uppercase ml-1 mb-1.5 block">Tujuan
-                                    Transfer</label>
-                                <select id="inputDest"
-                                    class="ui-input-base text-sm cursor-pointer bg-blue-500/5 border-blue-500/20 text-blue-100"></select>
-                            </div>
-
-                            <div>
-                                <label class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block">Detail
-                                    Transaksi</label>
-                                <div class="space-y-2">
-                                    <input type="text" id="inputDesc" placeholder="Keterangan..."
-                                        class="ui-input-base text-sm" required>
-                                    <div class="grid grid-cols-2 gap-2" id="categoryContainer">
-                                        <select id="inputCategory"
-                                            class="ui-input-base text-sm cursor-pointer col-span-2"></select>
-                                    </div>
-                                    <input type="text" id="inputNotes" placeholder="Catatan tambahan (Opsional)"
-                                        class="ui-input-base text-xs italic text-zinc-400 border-zinc-800 bg-zinc-900/50">
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="submit" id="submitBtn"
-                            class="w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center bg-zinc-700 text-white hover:bg-zinc-600">
-                            SIMPAN DATA
-                        </button>
-                    </form>
-
-                    <div class="mt-6 border-t border-zinc-800 pt-4">
-                        <details class="group">
-                            <summary
-                                class="flex justify-between items-center cursor-pointer text-zinc-500 hover:text-zinc-300 text-xs font-bold uppercase tracking-wider p-2 select-none transition bg-zinc-900/50 rounded-lg">
-                                <span>⚙️ Kelola Kategori/Dompet</span>
-                                <span class="group-open:rotate-180 transition-transform">▼</span>
-                            </summary>
-                            <div class="mt-2 space-y-4 bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-sm">
-                                <div>
-                                    <div class="flex justify-between mb-2"><span
-                                            class="text-xs text-zinc-500">Kategori</span> <button
-                                            onclick="addNewOption('category')"
-                                            class="text-xs text-indigo-400 hover:text-indigo-300">+ Baru</button></div>
-                                    <div id="manageCategoryList"
-                                        class="max-h-32 overflow-y-auto pr-1 space-y-1 custom-scroll"></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-2"><span
-                                            class="text-xs text-zinc-500">Dompet</span> <button
-                                            onclick="addNewOption('source')"
-                                            class="text-xs text-indigo-400 hover:text-indigo-300">+ Baru</button></div>
-                                    <div id="manageSourceList"
-                                        class="max-h-32 overflow-y-auto pr-1 space-y-1 custom-scroll"></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-2"><span
-                                            class="text-xs text-zinc-500">Preset</span></div>
-                                    <div id="managePresetList"
-                                        class="max-h-32 overflow-y-auto pr-1 space-y-1 custom-scroll"></div>
-                                </div>
-                                <button onclick="resetAllData()"
-                                    class="w-full py-2 text-xs font-bold text-rose-500 border border-rose-900/30 rounded-lg hover:bg-rose-900/10 mt-2">🔥
-                                    HAPUS SEMUA DATA</button>
-                            </div>
-                        </details>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="lg:col-span-6 h-full flex flex-col min-h-0 order-3 lg:order-2">
-            <div class="flex-shrink-0 mb-4 relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <span class="text-zinc-500">🔍</span>
-                </div>
-                <input type="text" id="searchInput" onkeyup="renderTransactionList()"
-                    class="ui-input-base pl-12 rounded-2xl bg-zinc-900 border-zinc-800 focus:bg-zinc-950"
-                    placeholder="Cari transaksi...">
-            </div>
-
-            <div id="transactionList" class="flex-1 custom-scroll overflow-y-auto pr-2 pb-10 space-y-2"></div>
-        </div>
-
-        <div class="lg:col-span-3 h-full flex flex-col gap-4 min-h-0 order-1 lg:order-3">
-
-            <div onclick="resetFilter()"
-                class="relative overflow-hidden rounded-2xl p-6 cursor-pointer group shadow-xl border border-zinc-700 bg-zinc-900 shrink-0">
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent opacity-50">
-                </div>
-                <div class="relative z-10">
-                    <p class="text-zinc-400 text-xs font-bold tracking-widest uppercase mb-1">Total Aset</p>
-                    <h2 class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight mb-5" id="totalBalance">Rp
-                        0</h2>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-zinc-950/50 rounded-xl p-3 border border-zinc-800">
-                            <div class="text-[10px] text-emerald-500 uppercase font-bold mb-1 flex items-center gap-1">↓
-                                Masuk</div>
-                            <div class="text-sm font-bold text-white font-mono" id="totalIncome">0</div>
-                        </div>
-                        <div class="bg-zinc-950/50 rounded-xl p-3 border border-zinc-800">
-                            <div class="text-[10px] text-rose-500 uppercase font-bold mb-1 flex items-center gap-1">↑
-                                Keluar</div>
-                            <div class="text-sm font-bold text-white font-mono" id="totalExpense">0</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ui-card p-5 flex-shrink-0">
-                <div class="flex justify-between items-center mb-4 px-1">
-                    <button onclick="changeMonth(-1)"
-                        class="w-8 h-8 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 rounded-full text-zinc-400 hover:text-white transition">❮</button>
-                    <h2 class="font-bold text-zinc-200 text-sm tracking-wide uppercase" id="calMonthYear">...</h2>
-                    <button onclick="changeMonth(1)"
-                        class="w-8 h-8 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 rounded-full text-zinc-400 hover:text-white transition">❯</button>
-                </div>
-
-                <div class="cal-grid mb-2 text-center">
-                    <div class="text-[10px] text-zinc-500 font-bold uppercase">Min</div>
-                    <div class="text-[10px] text-zinc-500 font-bold uppercase">Sen</div>
-                    <div class="text-[10px] text-zinc-500 font-bold uppercase">Sel</div>
-                    <div class="text-[10px] text-zinc-500 font-bold uppercase">Rab</div>
-                    <div class="text-[10px] text-zinc-500 font-bold uppercase">Kam</div>
-                    <div class="text-[10px] text-zinc-500 font-bold uppercase">Jum</div>
-                    <div class="text-[10px] text-zinc-500 font-bold uppercase">Sab</div>
-                </div>
-                <div id="calendarGrid" class="cal-grid"></div>
-                <div class="mt-4 pt-3 border-t border-zinc-800 flex justify-between items-center text-[10px]">
-                    <div class="flex gap-2">
-                        <span class="flex items-center gap-1 text-zinc-500">
-                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>Masuk
-                        </span>
-                        <span class="flex items-center gap-1 text-zinc-500">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>Keluar
-                        </span>
-                    </div>
-                    <span class="text-zinc-500 font-mono" id="calSummary">Total: 0</span>
-                </div>
-            </div>
-
-            <div class="ui-card flex-1 flex flex-col min-h-0">
-                <div class="p-4 border-b border-zinc-800 bg-zinc-900/50">
-                    <h3 class="font-bold text-zinc-400 text-xs uppercase tracking-wider">Dompet Saya</h3>
-                </div>
-                <div id="walletList" class="flex-1 custom-scroll overflow-y-auto p-3 space-y-2"></div>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        const defaultCategories = ["Makan", "Transport", "Belanja", "Data/Pulsa", "Tagihan", "Gaji", "Freelance", "Lainnya"];
-        const defaultSources = ["Tunai", "BCA", "GoPay", "DANA", "ShopeePay", "OVO"];
-        const defaultPresets = [{ label: '☕ Kopi', desc: 'Ngopi', amount: 18000, category: 'Makan', source: 'Tunai', type: 'expense' }, { label: '⛽ Bensin', desc: 'Isi BBM', amount: 30000, category: 'Transport', source: 'Tunai', type: 'expense' }];
-
-        let appState = {
-            transactions: JSON.parse(localStorage.getItem('keuangan_trx')) || [],
-            categories: JSON.parse(localStorage.getItem('keuangan_cats')) || [...defaultCategories],
-            sources: JSON.parse(localStorage.getItem('keuangan_srcs')) || [...defaultSources],
-            presets: JSON.parse(localStorage.getItem('keuangan_presets')) || [...defaultPresets]
-        };
-
-        let activeSourceFilter = null, viewDate = new Date(), selectedSpecificDate = null;
-
-        function saveData() {
-            localStorage.setItem('keuangan_trx', JSON.stringify(appState.transactions));
-            localStorage.setItem('keuangan_cats', JSON.stringify(appState.categories));
-            localStorage.setItem('keuangan_srcs', JSON.stringify(appState.sources));
-            localStorage.setItem('keuangan_presets', JSON.stringify(appState.presets));
-            renderAll();
-        }
-
-        function renderAll() { updateStatus(); renderWallets(); renderOptions(); renderPresets(); renderManageLists(); renderCalendar(); renderTransactionList(); }
-
-        function updateStatus() {
-            const totalEl = document.getElementById('totalBalance'), incEl = document.getElementById('totalIncome'), expEl = document.getElementById('totalExpense');
-            let inc = 0, exp = 0;
-            appState.transactions.forEach(t => { if (t.type === 'transfer') { exp += Number(t.admin || 0); } else { inc += Number(t.income || 0); exp += Number(t.expense || 0); } });
-            totalEl.innerText = formatRupiah(inc - exp); incEl.innerText = nFmt(inc); expEl.innerText = nFmt(exp);
-        }
-
-        function changeMonth(offset) { viewDate.setMonth(viewDate.getMonth() + offset); selectedSpecificDate = null; renderCalendar(); renderTransactionList(); }
-
-        function selectDate(day) {
-            selectedSpecificDate = (selectedSpecificDate === day) ? null : day;
-            if (selectedSpecificDate) {
-                const year = viewDate.getFullYear(), month = String(viewDate.getMonth() + 1).padStart(2, '0'), d = String(day).padStart(2, '0');
-                document.getElementById('inputDate').value = `${year}-${month}-${d}`;
-            } else {
-                document.getElementById('inputDate').valueAsDate = new Date();
-            }
-            renderCalendar(); renderTransactionList();
-        }
-
-        function renderCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            const label = document.getElementById('calMonthYear');
-            const summary = document.getElementById('calSummary');
-
-            grid.innerHTML = '';
-            const year = viewDate.getFullYear(), month = viewDate.getMonth();
-            label.innerText = viewDate.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
-
-            const dailyData = {}; let monthExp = 0;
-            appState.transactions.forEach(t => {
-                if (activeSourceFilter && (t.source !== activeSourceFilter && t.destination !== activeSourceFilter)) return;
-                const tDate = new Date(t.date);
-                if (tDate.getFullYear() === year && tDate.getMonth() === month) {
-                    const d = tDate.getDate();
-                    if (!dailyData[d]) dailyData[d] = { hasInc: false, hasExp: false, hasTrf: false };
-                    if (t.type === 'transfer') { dailyData[d].hasTrf = true; if (Number(t.admin) > 0) monthExp += Number(t.admin); }
-                    else { if (Number(t.income) > 0) dailyData[d].hasInc = true; if (Number(t.expense) > 0) { dailyData[d].hasExp = true; monthExp += Number(t.expense); } }
-                }
-            });
-            summary.innerText = `Keluar: ${nFmt(monthExp)}`;
-
-            for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
-            for (let day = 1; day <= daysInMonth; day++) {
-                const cell = document.createElement('div');
-                let className = "cal-cell";
-                if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) className += " today";
-                if (selectedSpecificDate === day) className += " active";
-                cell.className = className; cell.onclick = () => selectDate(day);
-
-                let dotsHtml = '';
-                if (dailyData[day]) {
-                    dotsHtml += `<div class="dot-wrapper">`;
-                    if (dailyData[day].hasInc) dotsHtml += `<div class="dot bg-emerald-500"></div>`;
-                    if (dailyData[day].hasExp) dotsHtml += `<div class="dot bg-rose-500"></div>`;
-                    if (dailyData[day].hasTrf) dotsHtml += `<div class="dot bg-blue-500"></div>`;
-                    dotsHtml += `</div>`;
-                }
-                cell.innerHTML = `<span class="relative z-10">${day}</span>${dotsHtml}`;
-                grid.appendChild(cell);
-            }
-        }
-
-        function renderTransactionList() {
-            const listContainer = document.getElementById('transactionList');
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const year = viewDate.getFullYear(), month = viewDate.getMonth();
-
-            let openingBalanceCutoff = selectedSpecificDate ? new Date(year, month, selectedSpecificDate) : new Date(year, month, 1);
-            let openingBalance = appState.transactions.reduce((acc, t) => {
-                if (activeSourceFilter && (t.source !== activeSourceFilter && t.destination !== activeSourceFilter)) return acc;
-                const tDate = new Date(t.date);
-                if (tDate < openingBalanceCutoff) {
-                    if (t.type === 'transfer') {
-                        if (activeSourceFilter) {
-                            if (t.source === activeSourceFilter) return acc - Number(t.amount) - Number(t.admin);
-                            if (t.destination === activeSourceFilter) return acc + Number(t.amount);
-                            return acc;
-                        }
-                        return acc - Number(t.admin);
-                    }
-                    return acc + Number(t.income || 0) - Number(t.expense || 0);
-                }
-                return acc;
-            }, 0);
-
-            let filtered = appState.transactions.filter(t => {
-                if (activeSourceFilter && (t.source !== activeSourceFilter && t.destination !== activeSourceFilter)) return false;
-                if (searchText !== '') return t.desc.toLowerCase().includes(searchText) || (t.category && t.category.toLowerCase().includes(searchText)) || t.source.toLowerCase().includes(searchText) || (t.destination && t.destination.toLowerCase().includes(searchText));
-                const tDate = new Date(t.date);
-                if (selectedSpecificDate) return tDate.getDate() === selectedSpecificDate && tDate.getMonth() === month && tDate.getFullYear() === year;
-                else return tDate.getMonth() === month && tDate.getFullYear() === year;
-            });
-
-            let html = '';
-            if (activeSourceFilter) html += `<div class="flex justify-between items-center bg-indigo-500/10 border border-indigo-500/30 p-3 rounded-xl mb-3"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> <span class="text-sm text-indigo-200 font-bold">Filter: ${activeSourceFilter}</span></div><button onclick="toggleSourceFilter('${activeSourceFilter}')" class="text-[10px] font-bold text-indigo-300 hover:text-white border border-indigo-500/30 px-3 py-1 rounded">HAPUS</button></div>`;
-            if (searchText === '') html += `<div class="flex justify-between items-center px-4 py-3 rounded-xl border border-dashed border-zinc-800 mb-4 bg-zinc-900/30"><div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wide">${selectedSpecificDate ? `Saldo Tgl ${selectedSpecificDate}` : `Saldo Awal Bulan`}</div><div class="font-mono font-bold text-sm text-zinc-300">${formatRupiah(openingBalance)}</div></div>`;
-            if (filtered.length === 0 && searchText === '') { listContainer.innerHTML = html + `<div class="flex flex-col items-center justify-center py-10 text-zinc-600 space-y-2"><span class="text-2xl opacity-50">📂</span><span class="text-xs font-medium">Belum ada transaksi</span></div>`; return; }
-
-            filtered.sort((a, b) => new Date(b.date) - new Date(a.date) || b.id - a.id);
-            const groups = {}; filtered.forEach(t => { if (!groups[t.date]) groups[t.date] = []; groups[t.date].push(t); });
-
-            Object.keys(groups).forEach(date => {
-                if (!selectedSpecificDate) html += `<div class="sticky top-0 z-10 bg-[#09090b]/90 backdrop-blur-md border-b border-zinc-800/50 py-2 mb-2 mt-4 flex items-center"><span class="font-bold text-zinc-400 text-xs px-2 bg-zinc-900 border border-zinc-800 rounded-md ml-1">${formatDateFriendly(date)}</span></div>`;
-                groups[date].forEach(t => {
-                    let icon, iconColor, amountColor, amountDisplay, subText;
-                    if (t.type === 'transfer') {
-                        icon = '⇄'; iconColor = 'text-blue-400 bg-blue-400/10 border-blue-400/20'; amountColor = 'text-zinc-200'; amountDisplay = nFmt(t.amount);
-                        subText = `<span class="text-blue-300">${t.source}</span> <span class="text-zinc-600">➔</span> <span class="text-blue-300">${t.destination}</span>${Number(t.admin) > 0 ? ` <span class="text-rose-400 text-[10px] ml-1">(Adm: ${nFmt(t.admin)})</span>` : ''}`;
-                    } else {
-                        const isExp = Number(t.expense) > 0;
-                        icon = isExp ? '↙' : '↗'; iconColor = isExp ? 'text-rose-400 bg-rose-500/10 border-rose-500/20' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'; amountColor = isExp ? 'text-rose-400' : 'text-emerald-400'; amountDisplay = formatRupiah(isExp ? t.expense : t.income);
-                        subText = `<span class="bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-300 border border-zinc-700">${t.category}</span> <span class="text-zinc-500">•</span> <span class="text-zinc-400">${t.source}</span>`;
-                    }
-                    html += `<div class="group relative bg-[#18181b] hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 p-3 rounded-xl transition-all mb-2 flex items-center justify-between animate-slide-in">
-                        <div class="flex items-start gap-3 min-w-0"><div class="w-9 h-9 rounded-lg border ${iconColor} flex items-center justify-center shrink-0 text-sm font-bold">${icon}</div>
-                        <div class="flex flex-col min-w-0"><span class="font-bold text-zinc-200 text-sm truncate pr-2">${t.desc}</span><div class="flex items-center gap-2 text-[11px] text-zinc-500 mt-0.5">${subText}</div>${t.notes ? `<div class="text-[10px] text-zinc-600 italic truncate max-w-[200px] mt-1">"${t.notes}"</div>` : ''}</div></div>
-                        <div class="text-right shrink-0 pl-2"><div class="font-mono font-bold text-sm ${amountColor}">${amountDisplay}</div><button onclick="deleteItem(${t.id})" class="text-[9px] text-zinc-600 hover:text-rose-500 font-bold uppercase tracking-wider transition opacity-0 group-hover:opacity-100 py-1">Hapus</button></div></div>`;
-                });
-            });
-            listContainer.innerHTML = html;
-        }
-
-        function getWalletAssets(n) { n = n.toLowerCase(); if (n.includes('bca') || n.includes('mandiri') || n.includes('bri')) return { col: 'text-blue-300', bg: 'bg-blue-600/10', br: 'border-blue-600/30', icon: '🏦' }; if (n.includes('gopay') || n.includes('dana') || n.includes('ovo')) return { col: 'text-sky-400', bg: 'bg-sky-500/10', br: 'border-sky-500/30', icon: '💳' }; if (n.includes('tunai')) return { col: 'text-emerald-400', bg: 'bg-emerald-500/10', br: 'border-emerald-500/30', icon: '💵' }; return { col: 'text-zinc-300', bg: 'bg-zinc-800', br: 'border-zinc-700', icon: '👛' }; }
-
-        function renderWallets() {
-            const container = document.getElementById('walletList'); container.innerHTML = '';
-            let balances = {}; appState.sources.forEach(s => balances[s] = 0);
-            appState.transactions.forEach(t => { if (!(t.source in balances)) balances[t.source] = 0; if (t.type === 'transfer') { balances[t.source] -= (Number(t.amount) + Number(t.admin)); if (!(t.destination in balances)) balances[t.destination] = 0; balances[t.destination] += Number(t.amount); } else { balances[t.source] += (Number(t.income || 0) - Number(t.expense || 0)); } });
-            Object.entries(balances).sort((a, b) => b[1] - a[1]).forEach(([src, amt]) => { const ast = getWalletAssets(src), active = activeSourceFilter === src; const div = document.createElement('div'); div.className = `p-3 rounded-xl border flex justify-between items-center cursor-pointer transition-all group ${active ? 'bg-indigo-900/20 border-indigo-500/40' : 'bg-zinc-950 border-zinc-800 hover:border-zinc-600'}`; div.onclick = () => toggleSourceFilter(src); div.innerHTML = `<div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg ${ast.bg} ${ast.br} border flex items-center justify-center text-sm shadow-sm">${ast.icon}</div><div class="flex flex-col"><span class="text-xs font-bold text-zinc-300 group-hover:text-white ${active ? 'text-indigo-300' : ''}">${src}</span></div></div><div class="font-mono font-bold text-sm text-zinc-200">${nFmt(amt)}</div>`; container.appendChild(div); });
-        }
-
-        function setTransactionType(t) {
-            document.getElementById('inputType').value = t;
-            const slider = document.getElementById('typeSlider'), btns = { exp: document.getElementById('btnExp'), inc: document.getElementById('btnInc'), trf: document.getElementById('btnTrf') }, submitBtn = document.getElementById('submitBtn'), els = { dest: document.getElementById('destContainer'), adm: document.getElementById('adminFeeContainer'), amt: document.getElementById('amountContainer'), cat: document.getElementById('categoryContainer'), lblSrc: document.getElementById('labelSource') };
-            Object.values(btns).forEach(b => b.className = "relative z-10 text-[10px] font-bold text-zinc-500 transition-colors hover:text-white");
-            if (t === 'expense') { slider.style.transform = 'translateX(0)'; slider.className = "absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-rose-900/40 border border-rose-500/50 rounded-lg shadow-sm transition-all duration-300"; btns.exp.className = "relative z-10 text-[10px] font-bold text-rose-400 transition-colors"; submitBtn.className = "w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center bg-rose-600 hover:bg-rose-500 text-white shadow-rose-900/20"; submitBtn.innerText = "SIMPAN PENGELUARAN"; els.dest.classList.add('hidden'); els.adm.classList.add('hidden'); els.amt.classList.replace('col-span-7', 'col-span-12'); els.cat.classList.remove('hidden'); els.lblSrc.innerText = "Sumber Dana"; }
-            else if (t === 'income') { slider.style.transform = 'translateX(100%)'; slider.className = "absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-emerald-900/40 border border-emerald-500/50 rounded-lg shadow-sm transition-all duration-300"; btns.inc.className = "relative z-10 text-[10px] font-bold text-emerald-400 transition-colors"; submitBtn.className = "w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/20"; submitBtn.innerText = "SIMPAN PEMASUKAN"; els.dest.classList.add('hidden'); els.adm.classList.add('hidden'); els.amt.classList.replace('col-span-7', 'col-span-12'); els.cat.classList.remove('hidden'); els.lblSrc.innerText = "Masuk Ke"; }
-            else { slider.style.transform = 'translateX(200%)'; slider.className = "absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-blue-900/40 border border-blue-500/50 rounded-lg shadow-sm transition-all duration-300"; btns.trf.className = "relative z-10 text-[10px] font-bold text-blue-400 transition-colors"; submitBtn.className = "w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20"; submitBtn.innerText = "PROSES TRANSFER"; els.dest.classList.remove('hidden'); els.adm.classList.remove('hidden'); els.amt.classList.replace('col-span-12', 'col-span-7'); els.cat.classList.add('hidden'); els.lblSrc.innerText = "Dari Dompet"; }
-        }
-
-        function toggleSourceFilter(s) { activeSourceFilter = (activeSourceFilter === s) ? null : s; document.getElementById('searchInput').value = ''; renderAll(); }
-        function renderOptions() { const c = document.getElementById('inputCategory'), s = document.getElementById('inputSource'), d = document.getElementById('inputDest'); const vc = c.value, vs = s.value, vd = d.value; c.innerHTML = appState.categories.map(x => `<option value="${x}">${x}</option>`).join(''); const srcHtml = appState.sources.map(x => `<option value="${x}">${x}</option>`).join(''); s.innerHTML = srcHtml; d.innerHTML = srcHtml; if (vc) c.value = vc; if (vs) s.value = vs; if (vd) d.value = vd; }
-        function renderPresets() { const c = document.getElementById('presetContainer'); c.innerHTML = ''; appState.presets.forEach(p => { const b = document.createElement('button'); b.className = `px-2 py-1 rounded-lg text-[10px] font-bold border transition-all hover:scale-105 ${p.type === 'expense' ? 'bg-rose-500/10 border-rose-500/20 text-rose-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`; b.innerHTML = `${p.label}`; b.onclick = (e) => { e.preventDefault(); setTransactionType(p.type || 'expense'); document.getElementById('inputDesc').value = p.desc; document.getElementById('inputCategory').value = p.category; const so = [...document.getElementById('inputSource').options].map(o => o.value); if (p.source && so.includes(p.source)) document.getElementById('inputSource').value = p.source; const a = document.getElementById('inputAmount'); if (p.amount > 0) { a.value = p.amount; a.blur(); } else { a.value = ''; a.focus(); } }; c.appendChild(b); }); const add = document.createElement('button'); add.className = "px-2 py-1 rounded-lg text-[10px] font-bold border border-dashed border-zinc-600 text-zinc-500 hover:text-white hover:border-zinc-400 transition-colors"; add.innerText = "+ Simpan Preset"; add.onclick = (e) => { e.preventDefault(); const d = document.getElementById('inputDesc').value, a = document.getElementById('inputAmount').value, cat = document.getElementById('inputCategory').value, s = document.getElementById('inputSource').value, t = document.getElementById('inputType').value; if (!d) return alert("Isi keterangan dulu!"); const l = prompt("Nama Preset (Contoh: Kopi Pagi):", d); if (l) { appState.presets.push({ label: l, desc: d, amount: a ? Number(a) : 0, category: cat, source: s, type: t }); saveData(); } }; c.appendChild(add); }
-        function renderManageLists() { const l = (arr, t) => arr.map((x, i) => `<div class="flex justify-between items-center bg-zinc-900 px-2 py-1.5 rounded border border-zinc-800 mb-1"><span class="truncate text-xs text-zinc-300 font-medium">${x}</span><button onclick="delOpt('${t}',${i})" class="text-zinc-500 hover:text-rose-400 font-bold px-2">×</button></div>`).join(''); document.getElementById('manageCategoryList').innerHTML = l(appState.categories, 'category'); document.getElementById('manageSourceList').innerHTML = l(appState.sources, 'source'); document.getElementById('managePresetList').innerHTML = appState.presets.map((p, i) => `<div class="flex justify-between items-center bg-zinc-900 px-2 py-1.5 rounded border border-zinc-800 mb-1"><span class="truncate text-xs text-zinc-300">${p.label}</span><button onclick="if(confirm('Hapus?')) { appState.presets.splice(${i},1); saveData(); }" class="text-zinc-500 hover:text-rose-400 font-bold px-2">×</button></div>`).join(''); }
-        function addNewOption(t) { const n = prompt("Nama Baru:"); if (n) { (t === 'category' ? appState.categories : appState.sources).push(n); saveData(); } }
-        function delOpt(t, i) { if (confirm("Hapus item ini?")) { (t === 'category' ? appState.categories : appState.sources).splice(i, 1); saveData(); } }
-        function resetForm() { document.getElementById('trxForm').reset(); document.getElementById('inputDate').valueAsDate = new Date(); setTransactionType('expense'); }
-        function resetFilter() { activeSourceFilter = null; document.getElementById('searchInput').value = ''; renderAll(); }
-        function resetAllData() { if (confirm("YAKIN HAPUS SEMUA DATA?")) { appState.transactions = []; saveData(); } }
-        function deleteItem(id) { if (confirm("Hapus transaksi ini?")) { appState.transactions = appState.transactions.filter(t => t.id !== id); saveData(); } }
-        function formatRupiah(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n).replace('Rp', 'Rp '); }
-        function nFmt(n) { return new Intl.NumberFormat('id-ID').format(n); }
-        function formatDateFriendly(d) { const D = new Date(d), N = new Date(); if (D.toDateString() === N.toDateString()) return "Hari Ini"; return D.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' }); }
-        function handleCSVSelect(inp) { const f = inp.files[0]; if (!f) return; const r = new FileReader(); r.onload = (e) => { const rows = e.target.result.split(/\r?\n/); const headers = rows.shift(); const newTrx = []; rows.forEach((row, i) => { if (!row.trim()) return; const c = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g); if (!c || c.length < 6) return; const exp = Number(c[3]) || 0; const inc = Number(c[4]) || 0; newTrx.push({ id: Date.now() + i, date: c[0], desc: c[1].replace(/"/g, ''), category: c[2], expense: exp, income: inc, amount: c[7] === 'transfer' ? (exp || inc) : 0, source: c[5], notes: c[6] ? c[6].replace(/"/g, '') : '', type: c[7] || (Number(c[3]) > 0 ? 'expense' : 'income'), destination: c[8] || '', admin: Number(c[9]) || 0 }); }); if (confirm(`Impor ${newTrx.length} transaksi?`)) { appState.transactions = newTrx; saveData(); } }; r.readAsText(f); }
-        function downloadCSV() { const c = "Date,Desc,Category,Expense,Income,Source,Notes,Type,Destination,Admin\n" + appState.transactions.map(t => `${t.date},"${t.desc}",${t.category},${t.expense},${t.income},${t.source},"${t.notes}",${t.type || (t.expense > 0 ? 'expense' : 'income')},${t.destination || ''},${t.admin || 0}`).join("\n"); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([c], { type: 'text/csv' })); a.download = `keuangan_ai_${new Date().toISOString().slice(0, 10)}.csv`; a.click(); }
-
-        document.getElementById('trxForm').addEventListener('submit', (e) => { e.preventDefault(); const t = document.getElementById('inputType').value; const a = Number(document.getElementById('inputAmount').value); if (!Number.isFinite(a) || a <= 0) return alert("Nominal harus lebih dari 0"); const admin = Number(document.getElementById('inputAdmin').value) || 0; if (t === 'transfer' && document.getElementById('inputSource').value === document.getElementById('inputDest').value) return alert("Dompet sama!"); appState.transactions.push({ id: Date.now() + Math.floor(Math.random() * 1000), date: document.getElementById('inputDate').value || new Date().toISOString().slice(0, 10), desc: document.getElementById('inputDesc').value, category: t === 'transfer' ? 'Transfer' : document.getElementById('inputCategory').value, source: document.getElementById('inputSource').value, destination: t === 'transfer' ? document.getElementById('inputDest').value : '', expense: t === 'expense' ? a : 0, income: t === 'income' ? a : 0, amount: t === 'transfer' ? a : 0, admin: t === 'transfer' ? admin : 0, type: t, notes: document.getElementById('inputNotes').value }); saveData(); resetForm(); });
-        document.getElementById('inputDate').valueAsDate = new Date();
-        setTransactionType('expense');
-        renderAll();
-    </script>
+<header class="flex-shrink-0 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-bold text-xl">
+✨
+</div>
+<div>
+<h1 class="text-xl font-bold text-white tracking-tight">
+Dompet<span class=text-indigo-400>AI</span>
+</h1>
+<p class="text-xs text-zinc-400 font-medium">Catatan Pengeluaran Harian</p>
+</div>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
+<label class="flex-1 md:flex-none h-10 px-4 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white text-xs font-bold cursor-pointer flex items-center justify-center gap-2 transition">
+📂 Import CSV
+<input type=file id=csvFileInput class=hidden accept=.csv onchange=handleCSVSelect(this) />
+</label>
+<button onclick=downloadCSV() class="flex-1 md:flex-none h-10 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 transition">
+💾 Export Data
+</button>
+</div>
+</header>
+<div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-6 pb-2">
+<div class="lg:col-span-3 h-full flex flex-col min-h-0 order-2 lg:order-1">
+<div class="ui-card h-full flex flex-col relative bg-card">
+<div class="p-4 border-b border-zinc-800 bg-zinc-900/50 flex justify-between items-center backdrop-blur-sm sticky top-0 z-10">
+<h3 class="font-bold text-zinc-300 text-sm uppercase tracking-wider">📝 Input Transaksi</h3>
+<button onclick=resetForm() class="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition">
+RESET
+</button>
+</div>
+<div class="p-4 overflow-y-auto custom-scroll flex-1">
+<form id=trxForm class=space-y-4>
+<div class="bg-zinc-950 p-1 rounded-xl border border-zinc-800 relative h-10 grid grid-cols-3 gap-1">
+<div id=typeSlider class="absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-zinc-800 rounded-lg shadow-sm transition-all duration-300 border border-zinc-700">
+</div>
+<button type=button onclick="setTransactionType('expense')" id=btnExp class="relative z-10 text-[10px] font-bold text-zinc-400 transition-colors hover:text-white">
+KELUAR
+</button>
+<button type=button onclick="setTransactionType('income')" id=btnInc class="relative z-10 text-[10px] font-bold text-zinc-400 transition-colors hover:text-white">
+MASUK
+</button>
+<button type=button onclick="setTransactionType('transfer')" id=btnTrf class="relative z-10 text-[10px] font-bold text-zinc-400 transition-colors hover:text-white">
+TF / ATM
+</button>
+<input type=hidden id=inputType value=expense />
+</div>
+<div class="flex flex-wrap gap-2" id=presetContainer></div>
+<div class="space-y-4 pt-2">
+<div>
+<label class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block">Total
+Nominal <span class=text-rose-500>*</span></label>
+<div class="grid grid-cols-12 gap-2">
+<div class="col-span-12 relative" id=amountContainer>
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 font-bold">
+Rp
+</div>
+<input type=number id=inputAmount placeholder=0 class="ui-input-base pl-10 text-lg font-mono font-bold text-white placeholder-zinc-700" required />
+</div>
+<div class="col-span-5 hidden" id=adminFeeContainer>
+<div class=relative>
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[10px] text-zinc-500 font-bold uppercase">
+Adm
+</div>
+<input type=number id=inputAdmin placeholder=0 class="ui-input-base pl-11 text-sm font-mono text-rose-300 bg-rose-500/5 border-rose-500/20" />
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block">Tanggal</label>
+<input type=date id=inputDate class="ui-input-base text-sm cursor-pointer" onclick=this.showPicker() />
+</div>
+<div id=sourceContainer>
+<label class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block" id=labelSource>Sumber</label>
+<select id=inputSource class="ui-input-base text-sm cursor-pointer"></select>
+</div>
+</div>
+<div class=hidden id=destContainer>
+<label class="text-[11px] font-bold text-blue-400 uppercase ml-1 mb-1.5 block">Tujuan
+Transfer</label>
+<select id=inputDest class="ui-input-base text-sm cursor-pointer bg-blue-500/5 border-blue-500/20 text-blue-100"></select>
+</div>
+<div>
+<label class="text-[11px] font-bold text-zinc-500 uppercase ml-1 mb-1.5 block">Detail
+Transaksi</label>
+<div class=space-y-2>
+<input type=text id=inputDesc placeholder=Keterangan... class="ui-input-base text-sm" required />
+<div class="grid grid-cols-2 gap-2" id=categoryContainer>
+<select id=inputCategory class="ui-input-base text-sm cursor-pointer col-span-2"></select>
+</div>
+<input type=text id=inputNotes placeholder="Catatan tambahan (Opsional)" class="ui-input-base text-xs italic text-zinc-400 border-zinc-800 bg-zinc-900/50" />
+</div>
+</div>
+</div>
+<button type=submit id=submitBtn class="w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center bg-zinc-700 text-white hover:bg-zinc-600">
+SIMPAN DATA
+</button>
+</form>
+<div class="mt-6 border-t border-zinc-800 pt-4">
+<details class=group>
+<summary class="flex justify-between items-center cursor-pointer text-zinc-500 hover:text-zinc-300 text-xs font-bold uppercase tracking-wider p-2 select-none transition bg-zinc-900/50 rounded-lg">
+<span>⚙️ Kelola Kategori/Dompet</span>
+<span class="group-open:rotate-180 transition-transform">▼</span>
+</summary>
+<div class="mt-2 space-y-4 bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-sm">
+<div>
+<div class="flex justify-between mb-2">
+<span class="text-xs text-zinc-500">Kategori</span>
+<button onclick="addNewOption('category')" class="text-xs text-indigo-400 hover:text-indigo-300">
++ Baru
+</button>
+</div>
+<div id=manageCategoryList class="max-h-32 overflow-y-auto pr-1 space-y-1 custom-scroll"></div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="text-xs text-zinc-500">Dompet</span>
+<button onclick="addNewOption('source')" class="text-xs text-indigo-400 hover:text-indigo-300">
++ Baru
+</button>
+</div>
+<div id=manageSourceList class="max-h-32 overflow-y-auto pr-1 space-y-1 custom-scroll"></div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="text-xs text-zinc-500">Preset</span>
+</div>
+<div id=managePresetList class="max-h-32 overflow-y-auto pr-1 space-y-1 custom-scroll"></div>
+</div>
+<button onclick=resetAllData() class="w-full py-2 text-xs font-bold text-rose-500 border border-rose-900/30 rounded-lg hover:bg-rose-900/10 mt-2">
+🔥 HAPUS SEMUA DATA
+</button>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-6 h-full flex flex-col min-h-0 order-3 lg:order-2">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+<div class="ui-card p-4 bg-zinc-900/50">
+<h4 class="text-[10px] font-bold text-zinc-500 uppercase mb-2">Pengeluaran per Kategori</h4>
+<div class="relative h-40 w-full flex justify-center">
+<canvas id=catChart></canvas>
+<div id=catEmpty class="absolute inset-0 flex items-center justify-center text-zinc-500 text-xs hidden pointer-events-none">
+Tidak ada pengeluaran
+</div>
+</div>
+</div>
+<div class="ui-card p-4 bg-zinc-900/50">
+<h4 class="text-[10px] font-bold text-zinc-500 uppercase mb-2">Grafik Batang</h4>
+<div class="relative h-40 w-full">
+<canvas id=trendChart></canvas>
+<div id=trendEmpty class="absolute inset-0 flex items-center justify-center text-zinc-500 text-xs hidden pointer-events-none">
+Tidak ada transaksi
+</div>
+</div>
+</div>
+</div>
+<div class="flex-shrink-0 mb-4 relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class=text-zinc-500>🔍</span>
+</div>
+<input type=text id=searchInput onkeyup=renderTransactionList() class="ui-input-base pl-12 rounded-2xl bg-zinc-900 border-zinc-800 focus:bg-zinc-950" placeholder="Cari transaksi..." />
+</div>
+<div id=transactionList class="flex-1 custom-scroll overflow-y-auto pr-2 pb-10 space-y-2"></div>
+</div>
+<div class="lg:col-span-3 h-full flex flex-col gap-4 min-h-0 order-1 lg:order-3">
+<div onclick=resetFilter() class="relative overflow-hidden rounded-2xl p-6 cursor-pointer group shadow-xl border border-zinc-700 bg-zinc-900 shrink-0">
+<div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent opacity-50">
+</div>
+<div class="relative z-10">
+<p class="text-zinc-400 text-xs font-bold tracking-widest uppercase mb-1">Total Aset</p>
+<h2 class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight mb-5" id=totalBalance>
+Rp 0
+</h2>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-zinc-950/50 rounded-xl p-3 border border-zinc-800">
+<div class="text-[10px] text-emerald-500 uppercase font-bold mb-1 flex items-center gap-1">
+↓ Masuk
+</div>
+<div class="text-sm font-bold text-white font-mono" id=totalIncome>0</div>
+</div>
+<div class="bg-zinc-950/50 rounded-xl p-3 border border-zinc-800">
+<div class="text-[10px] text-rose-500 uppercase font-bold mb-1 flex items-center gap-1">
+↑ Keluar
+</div>
+<div class="text-sm font-bold text-white font-mono" id=totalExpense>0</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ui-card p-5 flex-shrink-0">
+<div class="flex justify-between items-center mb-4 px-1">
+<button onclick=changeMonth(-1) class="w-8 h-8 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 rounded-full text-zinc-400 hover:text-white transition">
+❮
+</button>
+<h2 class="font-bold text-zinc-200 text-sm tracking-wide uppercase" id=calMonthYear>...</h2>
+<button onclick=changeMonth(1) class="w-8 h-8 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 rounded-full text-zinc-400 hover:text-white transition">
+❯
+</button>
+</div>
+<div class="cal-grid mb-2 text-center">
+<div class="text-[10px] text-zinc-500 font-bold uppercase">Min</div>
+<div class="text-[10px] text-zinc-500 font-bold uppercase">Sen</div>
+<div class="text-[10px] text-zinc-500 font-bold uppercase">Sel</div>
+<div class="text-[10px] text-zinc-500 font-bold uppercase">Rab</div>
+<div class="text-[10px] text-zinc-500 font-bold uppercase">Kam</div>
+<div class="text-[10px] text-zinc-500 font-bold uppercase">Jum</div>
+<div class="text-[10px] text-zinc-500 font-bold uppercase">Sab</div>
+</div>
+<div id=calendarGrid class=cal-grid></div>
+<div class="mt-4 pt-3 border-t border-zinc-800 flex justify-between items-center text-[10px]">
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-zinc-500">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+Masuk
+</span>
+<span class="flex items-center gap-1 text-zinc-500">
+<div class="w-2 h-2 rounded-full bg-rose-500"></div>
+Keluar
+</span>
+</div>
+<span class="text-zinc-500 font-mono" id=calSummary>Total: 0</span>
+</div>
+</div>
+<div class="ui-card flex-1 flex flex-col min-h-0">
+<div class="p-4 border-b border-zinc-800 bg-zinc-900/50">
+<h3 class="font-bold text-zinc-400 text-xs uppercase tracking-wider">Dompet Saya</h3>
+</div>
+<div id=walletList class="flex-1 custom-scroll overflow-y-auto p-3 space-y-2"></div>
+</div>
+</div>
+</div>
+<div id=sizeBlocker class="fixed inset-0 z-[9999] bg-black/90 backdrop-blur flex flex-col items-center justify-center text-center text-zinc-300 hidden">
+<div class="max-w-sm px-6">
+<div class="text-4xl mb-4">🖥️</div>
+<h2 class="text-lg font-bold text-white mb-2">
+Mode Layar Penuh Diperlukan
+</h2>
+<p class="text-sm text-zinc-400">
+Aplikasi ini hanya dapat digunakan saat jendela browser
+dibuka dalam mode maksimal.
+</p>
+<p class="text-xs text-zinc-500 mt-4">
+Perbesar jendela browser Anda.
+</p>
+</div>
+</div>
+<script>let catChartInstance=null;let trendChartInstance=null;const defaultCategories=["Makan","Transport","Belanja","Data/Pulsa","Tagihan","Gaji","Freelance","Lainnya",];const defaultSources=["Tunai","BCA","GoPay","DANA","ShopeePay","OVO"];const defaultPresets=[{label:"☕ Kopi",desc:"Ngopi",amount:18000,category:"Makan",source:"Tunai",type:"expense"},{label:"⛽ Bensin",desc:"Isi BBM",amount:30000,category:"Transport",source:"Tunai",type:"expense",},];let appState={transactions:JSON.parse(localStorage.getItem("keuangan_trx"))||[],categories:JSON.parse(localStorage.getItem("keuangan_cats"))||[...defaultCategories],sources:JSON.parse(localStorage.getItem("keuangan_srcs"))||[...defaultSources],presets:JSON.parse(localStorage.getItem("keuangan_presets"))||[...defaultPresets],};let activeSourceFilter=null,viewDate=new Date(),selectedSpecificDate=null;function saveData(){localStorage.setItem("keuangan_trx",JSON.stringify(appState.transactions));localStorage.setItem("keuangan_cats",JSON.stringify(appState.categories));localStorage.setItem("keuangan_srcs",JSON.stringify(appState.sources));localStorage.setItem("keuangan_presets",JSON.stringify(appState.presets));renderAll();}
+function renderAll(){updateStatus();renderWallets();renderOptions();renderPresets();renderManageLists();renderCalendar();renderTransactionList();renderCharts();}
+function renderCharts(){const catTotals={};const year=viewDate.getFullYear(),month=viewDate.getMonth();appState.transactions.forEach((t)=>{if(activeSourceFilter&&t.source!==activeSourceFilter&&t.destination!==activeSourceFilter)
+return;const tDate=new Date(t.date);let dateMatch=false;if(selectedSpecificDate){dateMatch=tDate.getDate()===selectedSpecificDate&&tDate.getMonth()===month&&tDate.getFullYear()===year;}else{dateMatch=tDate.getMonth()===month&&tDate.getFullYear()===year;}
+if(dateMatch&&Number(t.expense)>0&&t.type!=="transfer"){catTotals[t.category]=(catTotals[t.category]||0)+Number(t.expense);}});const catLabels=Object.keys(catTotals);const catData=Object.values(catTotals);const hasCatData=catData.length>0;const catEmptyEl=document.getElementById("catEmpty");catEmptyEl.classList.toggle("hidden",hasCatData);if(!hasCatData){if(catChartInstance)catChartInstance.destroy();return;}
+const bgColors=["#6366f1","#ec4899","#8b5cf6","#10b981","#f59e0b","#ef4444","#3b82f6","#64748b",];const ctxCat=document.getElementById("catChart").getContext("2d");if(catChartInstance)catChartInstance.destroy();catChartInstance=new Chart(ctxCat,{type:"doughnut",data:{labels:catLabels,datasets:[{data:catData,backgroundColor:bgColors,borderWidth:0,hoverOffset:4,},],},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{color:"#a1a1aa",boxWidth:10,font:{size:10}},},tooltip:{callbacks:{label:(ctx)=>`${ctx.label}:${nFmt(ctx.raw)}`}},},cutout:"70%",},});const trendLabels=[];const dataInc=[];const dataExp=[];let startDate,endDate;const chartTitle=selectedSpecificDate?`Tanggal ${selectedSpecificDate}`:"7 Hari Terakhir";if(selectedSpecificDate){startDate=selectedSpecificDate;endDate=selectedSpecificDate;}else{const isCurrentMonth=new Date().getMonth()===month;endDate=isCurrentMonth?new Date().getDate():new Date(year,month+1,0).getDate();startDate=Math.max(1,endDate-6);}
+for(let d=startDate;d<=endDate;d++){trendLabels.push(d);let dInc=0,dExp=0;appState.transactions.forEach((t)=>{if(activeSourceFilter&&t.source!==activeSourceFilter&&t.destination!==activeSourceFilter)
+return;const tDate=new Date(t.date);if(tDate.getDate()===d&&tDate.getMonth()===month&&tDate.getFullYear()===year){if(t.type!=="transfer"){dInc+=Number(t.income||0);dExp+=Number(t.expense||0);}}});dataInc.push(dInc);dataExp.push(dExp);}
+const hasTrendData=dataInc.some((v)=>v>0)||dataExp.some((v)=>v>0);document.getElementById("trendEmpty").classList.toggle("hidden",hasTrendData);if(!hasTrendData&&selectedSpecificDate){if(trendChartInstance)trendChartInstance.destroy();return;}
+const ctxTrend=document.getElementById("trendChart").getContext("2d");if(trendChartInstance)trendChartInstance.destroy();trendChartInstance=new Chart(ctxTrend,{type:"bar",data:{labels:trendLabels,datasets:[{label:"Masuk",data:dataInc,backgroundColor:"#10b981",borderRadius:2},{label:"Keluar",data:dataExp,backgroundColor:"#f43f5e",borderRadius:2},],},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false},ticks:{color:"#71717a",font:{size:9}}},y:{display:false},},plugins:{legend:{display:false},title:{display:true,text:chartTitle,color:"#a1a1aa",font:{size:10,weight:"bold",},padding:{bottom:6,},},tooltip:{mode:"index",intersect:false,callbacks:{label:(ctx)=>`${ctx.dataset.label}:${nFmt(ctx.raw)}`,},},},},});}
+function updateStatus(){const totalEl=document.getElementById("totalBalance"),incEl=document.getElementById("totalIncome"),expEl=document.getElementById("totalExpense");let inc=0,exp=0;appState.transactions.forEach((t)=>{if(t.type==="transfer"){exp+=Number(t.admin||0);}else{inc+=Number(t.income||0);exp+=Number(t.expense||0);}});totalEl.innerText=formatRupiah(inc-exp);incEl.innerText=nFmt(inc);expEl.innerText=nFmt(exp);}
+function changeMonth(offset){viewDate.setMonth(viewDate.getMonth()+offset);selectedSpecificDate=null;renderCalendar();renderTransactionList();}
+function selectDate(day){selectedSpecificDate=selectedSpecificDate===day?null:day;if(selectedSpecificDate){const year=viewDate.getFullYear(),month=String(viewDate.getMonth()+1).padStart(2,"0"),d=String(day).padStart(2,"0");document.getElementById("inputDate").value=`${year}-${month}-${d}`;}else{document.getElementById("inputDate").valueAsDate=new Date();}
+renderCalendar();renderTransactionList();renderCharts();}
+function renderCalendar(){const grid=document.getElementById("calendarGrid");const label=document.getElementById("calMonthYear");const summary=document.getElementById("calSummary");grid.innerHTML="";const year=viewDate.getFullYear(),month=viewDate.getMonth();label.innerText=viewDate.toLocaleDateString("id-ID",{month:"long",year:"numeric"});const firstDay=new Date(year,month,1).getDay();const daysInMonth=new Date(year,month+1,0).getDate();const today=new Date();const dailyData={};let monthExp=0;appState.transactions.forEach((t)=>{if(activeSourceFilter&&t.source!==activeSourceFilter&&t.destination!==activeSourceFilter)
+return;const tDate=new Date(t.date);if(tDate.getFullYear()===year&&tDate.getMonth()===month){const d=tDate.getDate();if(!dailyData[d])dailyData[d]={hasInc:false,hasExp:false,hasTrf:false};if(t.type==="transfer"){dailyData[d].hasTrf=true;if(Number(t.admin)>0)monthExp+=Number(t.admin);}else{if(Number(t.income)>0)dailyData[d].hasInc=true;if(Number(t.expense)>0){dailyData[d].hasExp=true;monthExp+=Number(t.expense);}}}});summary.innerText=`Keluar:${nFmt(monthExp)}`;for(let i=0;i<firstDay;i++)grid.innerHTML+=`<div></div>`;for(let day=1;day<=daysInMonth;day++){const cell=document.createElement("div");let className="cal-cell";if(today.getDate()===day&&today.getMonth()===month&&today.getFullYear()===year)
+className+=" today";if(selectedSpecificDate===day)className+=" active";cell.className=className;cell.onclick=()=>selectDate(day);let dotsHtml="";if(dailyData[day]){dotsHtml+=`<div class="dot-wrapper">`;if(dailyData[day].hasInc)dotsHtml+=`<div class="dot bg-emerald-500"></div>`;if(dailyData[day].hasExp)dotsHtml+=`<div class="dot bg-rose-500"></div>`;if(dailyData[day].hasTrf)dotsHtml+=`<div class="dot bg-blue-500"></div>`;dotsHtml+=`</div>`;}
+cell.innerHTML=`<span class="relative z-10">${day}</span>${dotsHtml}`;grid.appendChild(cell);}}
+function renderTransactionList(){const listContainer=document.getElementById("transactionList");const searchText=document.getElementById("searchInput").value.toLowerCase();const year=viewDate.getFullYear(),month=viewDate.getMonth();let openingBalanceCutoff=selectedSpecificDate?new Date(year,month,selectedSpecificDate):new Date(year,month,1);let openingBalance=appState.transactions.reduce((acc,t)=>{if(activeSourceFilter&&t.source!==activeSourceFilter&&t.destination!==activeSourceFilter)
+return acc;const tDate=new Date(t.date);if(tDate<openingBalanceCutoff){if(t.type==="transfer"){if(activeSourceFilter){if(t.source===activeSourceFilter)return acc-Number(t.amount)-Number(t.admin);if(t.destination===activeSourceFilter)return acc+Number(t.amount);return acc;}
+return acc-Number(t.admin);}
+return acc+Number(t.income||0)-Number(t.expense||0);}
+return acc;},0);let filtered=appState.transactions.filter((t)=>{if(activeSourceFilter&&t.source!==activeSourceFilter&&t.destination!==activeSourceFilter)
+return false;if(searchText!=="")
+return(t.desc.toLowerCase().includes(searchText)||(t.category&&t.category.toLowerCase().includes(searchText))||t.source.toLowerCase().includes(searchText)||(t.destination&&t.destination.toLowerCase().includes(searchText)));const tDate=new Date(t.date);if(selectedSpecificDate)
+return(tDate.getDate()===selectedSpecificDate&&tDate.getMonth()===month&&tDate.getFullYear()===year);else return tDate.getMonth()===month&&tDate.getFullYear()===year;});let html="";if(activeSourceFilter)
+html+=`<div class="flex justify-between items-center bg-indigo-500/10 border border-indigo-500/30 p-3 rounded-xl mb-3"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span><span class="text-sm text-indigo-200 font-bold">Filter:${activeSourceFilter}</span></div><button onclick="toggleSourceFilter('${activeSourceFilter}')"class="text-[10px] font-bold text-indigo-300 hover:text-white border border-indigo-500/30 px-3 py-1 rounded">HAPUS</button></div>`;if(searchText==="")
+html+=`<div class="flex justify-between items-center px-4 py-3 rounded-xl border border-dashed border-zinc-800 mb-4 bg-zinc-900/30"><div class="text-[11px] font-bold text-zinc-500 uppercase tracking-wide">${selectedSpecificDate?`Saldo Tgl ${selectedSpecificDate}`:`Saldo Awal Bulan`}</div><div class="font-mono font-bold text-sm text-zinc-300">${formatRupiah(openingBalance)}</div></div>`;if(filtered.length===0&&searchText===""){listContainer.innerHTML=html+`<div class="flex flex-col items-center justify-center py-10 text-zinc-600 space-y-2"><span class="text-2xl opacity-50">📂</span><span class="text-xs font-medium">Belum ada transaksi</span></div>`;return;}
+filtered.sort((a,b)=>new Date(b.date)-new Date(a.date)||b.id-a.id);const groups={};filtered.forEach((t)=>{if(!groups[t.date])groups[t.date]=[];groups[t.date].push(t);});Object.keys(groups).forEach((date)=>{if(!selectedSpecificDate)
+html+=`<div class="sticky top-0 z-10 bg-[#09090b]/90 backdrop-blur-md border-b border-zinc-800/50 py-2 mb-2 mt-4 flex items-center"><span class="font-bold text-zinc-400 text-xs px-2 bg-zinc-900 border border-zinc-800 rounded-md ml-1">${formatDateFriendly(date)}</span></div>`;groups[date].forEach((t)=>{let icon,iconColor,amountColor,amountDisplay,subText;if(t.type==="transfer"){icon="⇄";iconColor="text-blue-400 bg-blue-400/10 border-blue-400/20";amountColor="text-zinc-200";amountDisplay=nFmt(t.amount);subText=`<span class="text-blue-300">${t.source}</span><span class="text-zinc-600">➔</span><span class="text-blue-300">${t.destination}</span>${Number(t.admin)>0?`<span class="text-rose-400 text-[10px] ml-1">(Adm:${nFmt(t.admin)})</span>`:""}`;}else{const isExp=Number(t.expense)>0;icon=isExp?"↙":"↗";iconColor=isExp?"text-rose-400 bg-rose-500/10 border-rose-500/20":"text-emerald-400 bg-emerald-500/10 border-emerald-500/20";amountColor=isExp?"text-rose-400":"text-emerald-400";amountDisplay=formatRupiah(isExp?t.expense:t.income);subText=`<span class="bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-300 border border-zinc-700">${t.category}</span><span class="text-zinc-500">•</span><span class="text-zinc-400">${t.source}</span>`;}
+html+=`<div class="group relative bg-[#18181b] hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 p-3 rounded-xl transition-all mb-2 flex items-center justify-between animate-slide-in"><div class="flex items-start gap-3 min-w-0"><div class="w-9 h-9 rounded-lg border ${iconColor} flex items-center justify-center shrink-0 text-sm font-bold">${icon}</div><div class="flex flex-col min-w-0"><span class="font-bold text-zinc-200 text-sm truncate pr-2">${t.desc}</span><div class="flex items-center gap-2 text-[11px] text-zinc-500 mt-0.5">${subText}</div>${t.notes?`<div class="text-[10px] text-zinc-600 italic truncate max-w-[200px] mt-1">"${t.notes}"</div>`:""}</div></div><div class="text-right shrink-0 pl-2"><div class="font-mono font-bold text-sm ${amountColor}">${amountDisplay}</div><button onclick="deleteItem(${t.id})"class="text-[9px] text-zinc-600 hover:text-rose-500 font-bold uppercase tracking-wider transition opacity-0 group-hover:opacity-100 py-1">Hapus</button></div></div>`;});});listContainer.innerHTML=html;}
+function getWalletAssets(n){n=n.toLowerCase();if(n.includes("bca")||n.includes("mandiri")||n.includes("bri"))
+return{col:"text-blue-300",bg:"bg-blue-600/10",br:"border-blue-600/30",icon:"🏦"};if(n.includes("gopay")||n.includes("dana")||n.includes("ovo"))
+return{col:"text-sky-400",bg:"bg-sky-500/10",br:"border-sky-500/30",icon:"💳"};if(n.includes("tunai"))
+return{col:"text-emerald-400",bg:"bg-emerald-500/10",br:"border-emerald-500/30",icon:"💵",};return{col:"text-zinc-300",bg:"bg-zinc-800",br:"border-zinc-700",icon:"👛"};}
+function renderWallets(){const container=document.getElementById("walletList");container.innerHTML="";let balances={};appState.sources.forEach((s)=>(balances[s]=0));appState.transactions.forEach((t)=>{if(!(t.source in balances))balances[t.source]=0;if(t.type==="transfer"){balances[t.source]-=Number(t.amount)+Number(t.admin);if(!(t.destination in balances))balances[t.destination]=0;balances[t.destination]+=Number(t.amount);}else{balances[t.source]+=Number(t.income||0)-Number(t.expense||0);}});Object.entries(balances).sort((a,b)=>b[1]-a[1]).forEach(([src,amt])=>{const ast=getWalletAssets(src),active=activeSourceFilter===src;const div=document.createElement("div");div.className=`p-3 rounded-xl border flex justify-between items-center cursor-pointer transition-all group ${active?"bg-indigo-900/20 border-indigo-500/40":"bg-zinc-950 border-zinc-800 hover:border-zinc-600"}`;div.onclick=()=>toggleSourceFilter(src);div.innerHTML=`<div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg ${ast.bg} ${ast.br} border flex items-center justify-center text-sm shadow-sm">${ast.icon}</div><div class="flex flex-col"><span class="text-xs font-bold text-zinc-300 group-hover:text-white ${active ? "text-indigo-300" : ""}">${src}</span></div></div><div class="font-mono font-bold text-sm text-zinc-200">${nFmt(amt)}</div>`;container.appendChild(div);});}
+function setTransactionType(t){document.getElementById("inputType").value=t;const slider=document.getElementById("typeSlider"),btns={exp:document.getElementById("btnExp"),inc:document.getElementById("btnInc"),trf:document.getElementById("btnTrf"),},submitBtn=document.getElementById("submitBtn"),els={dest:document.getElementById("destContainer"),adm:document.getElementById("adminFeeContainer"),amt:document.getElementById("amountContainer"),cat:document.getElementById("categoryContainer"),lblSrc:document.getElementById("labelSource"),};Object.values(btns).forEach((b)=>(b.className="relative z-10 text-[10px] font-bold text-zinc-500 transition-colors hover:text-white"));if(t==="expense"){slider.style.transform="translateX(0)";slider.className="absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-rose-900/40 border border-rose-500/50 rounded-lg shadow-sm transition-all duration-300";btns.exp.className="relative z-10 text-[10px] font-bold text-rose-400 transition-colors";submitBtn.className="w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center bg-rose-600 hover:bg-rose-500 text-white shadow-rose-900/20";submitBtn.innerText="SIMPAN PENGELUARAN";els.dest.classList.add("hidden");els.adm.classList.add("hidden");els.amt.classList.replace("col-span-7","col-span-12");els.cat.classList.remove("hidden");els.lblSrc.innerText="Sumber Dana";}else if(t==="income"){slider.style.transform="translateX(100%)";slider.className="absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-emerald-900/40 border border-emerald-500/50 rounded-lg shadow-sm transition-all duration-300";btns.inc.className="relative z-10 text-[10px] font-bold text-emerald-400 transition-colors";submitBtn.className="w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/20";submitBtn.innerText="SIMPAN PEMASUKAN";els.dest.classList.add("hidden");els.adm.classList.add("hidden");els.amt.classList.replace("col-span-7","col-span-12");els.cat.classList.remove("hidden");els.lblSrc.innerText="Masuk Ke";}else{slider.style.transform="translateX(200%)";slider.className="absolute top-1 left-1 w-[calc(33.33%-4px)] h-[calc(100%-8px)] bg-blue-900/40 border border-blue-500/50 rounded-lg shadow-sm transition-all duration-300";btns.trf.className="relative z-10 text-[10px] font-bold text-blue-400 transition-colors";submitBtn.className="w-full h-12 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20";submitBtn.innerText="PROSES TRANSFER";els.dest.classList.remove("hidden");els.adm.classList.remove("hidden");els.amt.classList.replace("col-span-12","col-span-7");els.cat.classList.add("hidden");els.lblSrc.innerText="Dari Dompet";}}
+function toggleSourceFilter(s){activeSourceFilter=activeSourceFilter===s?null:s;document.getElementById("searchInput").value="";renderAll();}
+function renderOptions(){const c=document.getElementById("inputCategory"),s=document.getElementById("inputSource"),d=document.getElementById("inputDest");const vc=c.value,vs=s.value,vd=d.value;c.innerHTML=appState.categories.map((x)=>`<option value="${x}">${x}</option>`).join("");const srcHtml=appState.sources.map((x)=>`<option value="${x}">${x}</option>`).join("");s.innerHTML=srcHtml;d.innerHTML=srcHtml;if(vc)c.value=vc;if(vs)s.value=vs;if(vd)d.value=vd;}
+function renderPresets(){const c=document.getElementById("presetContainer");c.innerHTML="";appState.presets.forEach((p)=>{const b=document.createElement("button");b.className=`px-2 py-1 rounded-lg text-[10px]font-bold border transition-all hover:scale-105 ${p.type==="expense"?"bg-rose-500/10 border-rose-500/20 text-rose-400":"bg-emerald-500/10 border-emerald-500/20 text-emerald-400"}`;b.innerHTML=`${p.label}`;b.onclick=(e)=>{e.preventDefault();setTransactionType(p.type||"expense");document.getElementById("inputDesc").value=p.desc;document.getElementById("inputCategory").value=p.category;const so=[...document.getElementById("inputSource").options].map((o)=>o.value);if(p.source&&so.includes(p.source))document.getElementById("inputSource").value=p.source;const a=document.getElementById("inputAmount");if(p.amount>0){a.value=p.amount;a.blur();}else{a.value="";a.focus();}};c.appendChild(b);});const add=document.createElement("button");add.className="px-2 py-1 rounded-lg text-[10px] font-bold border border-dashed border-zinc-600 text-zinc-500 hover:text-white hover:border-zinc-400 transition-colors";add.innerText="+ Simpan Preset";add.onclick=(e)=>{e.preventDefault();const d=document.getElementById("inputDesc").value,a=document.getElementById("inputAmount").value,cat=document.getElementById("inputCategory").value,s=document.getElementById("inputSource").value,t=document.getElementById("inputType").value;if(!d)return alert("Isi keterangan dulu!");const l=prompt("Nama Preset (Contoh: Kopi Pagi):",d);if(l){appState.presets.push({label:l,desc:d,amount:a?Number(a):0,category:cat,source:s,type:t,});saveData();}};c.appendChild(add);}
+function renderManageLists(){const l=(arr,t)=>arr.map((x,i)=>`<div class="flex justify-between items-center bg-zinc-900 px-2 py-1.5 rounded border border-zinc-800 mb-1"><span class="truncate text-xs text-zinc-300 font-medium">${x}</span><button onclick="delOpt('${t}',${i})"class="text-zinc-500 hover:text-rose-400 font-bold px-2">×</button></div>`).join("");document.getElementById("manageCategoryList").innerHTML=l(appState.categories,"category");document.getElementById("manageSourceList").innerHTML=l(appState.sources,"source");document.getElementById("managePresetList").innerHTML=appState.presets.map((p,i)=>`<div class="flex justify-between items-center bg-zinc-900 px-2 py-1.5 rounded border border-zinc-800 mb-1"><span class="truncate text-xs text-zinc-300">${p.label}</span><button onclick="if(confirm('Hapus?')) { appState.presets.splice(${i},1); saveData(); }"class="text-zinc-500 hover:text-rose-400 font-bold px-2">×</button></div>`).join("");}
+function addNewOption(t){const n=prompt("Nama Baru:");if(n){(t==="category"?appState.categories:appState.sources).push(n);saveData();}}
+function delOpt(t,i){if(confirm("Hapus item ini?")){(t==="category"?appState.categories:appState.sources).splice(i,1);saveData();}}
+function resetForm(){document.getElementById("trxForm").reset();document.getElementById("inputDate").valueAsDate=new Date();setTransactionType("expense");}
+function resetFilter(){activeSourceFilter=null;document.getElementById("searchInput").value="";renderAll();}
+function resetAllData(){if(confirm("YAKIN HAPUS SEMUA DATA?")){appState.transactions=[];saveData();}}
+function deleteItem(id){if(confirm("Hapus transaksi ini?")){appState.transactions=appState.transactions.filter((t)=>t.id!==id);saveData();}}
+function formatRupiah(n){return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",minimumFractionDigits:0}).format(n).replace("Rp","Rp ");}
+function nFmt(n){return new Intl.NumberFormat("id-ID").format(n);}
+function formatDateFriendly(d){const D=new Date(d),N=new Date();if(D.toDateString()===N.toDateString())return"Hari Ini";return D.toLocaleDateString("id-ID",{weekday:"short",day:"numeric",month:"short"});}
+function handleCSVSelect(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=(e)=>{const rows=e.target.result.split(/\r?\n/);const headers=rows.shift();const newTrx=[];rows.forEach((row,i)=>{if(!row.trim())return;const c=row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);if(!c||c.length<6)return;const exp=Number(c[3])||0;const inc=Number(c[4])||0;newTrx.push({id:Date.now()+i,date:c[0],desc:c[1].replace(/"/g,""),category:c[2],expense:exp,income:inc,amount:c[7]==="transfer"?exp||inc:0,source:c[5],notes:c[6]?c[6].replace(/"/g,""):"",type:c[7]||(Number(c[3])>0?"expense":"income"),destination:c[8]||"",admin:Number(c[9])||0,});});if(confirm(`Impor ${newTrx.length}transaksi?`)){appState.transactions=newTrx;saveData();}};r.readAsText(f);}
+function downloadCSV(){const c="Date,Desc,Category,Expense,Income,Source,Notes,Type,Destination,Admin\n"+
+appState.transactions.map((t)=>`${t.date},"${t.desc}",${t.category},${t.expense},${t.income},${t.source},"${t.notes}",${t.type||(t.expense>0?"expense":"income")},${t.destination||""},${t.admin||0}`).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c],{type:"text/csv"}));a.download=`keuangan_ai_${new Date().toISOString().slice(0,10)}.csv`;a.click();}
+document.getElementById("trxForm").addEventListener("submit",(e)=>{e.preventDefault();const t=document.getElementById("inputType").value;const a=Number(document.getElementById("inputAmount").value);if(!Number.isFinite(a)||a<=0)return alert("Nominal harus lebih dari 0");const admin=Number(document.getElementById("inputAdmin").value)||0;if(t==="transfer"&&document.getElementById("inputSource").value===document.getElementById("inputDest").value)
+return alert("Dompet sama!");appState.transactions.push({id:Date.now()+Math.floor(Math.random()*1000),date:document.getElementById("inputDate").value||new Date().toISOString().slice(0,10),desc:document.getElementById("inputDesc").value,category:t==="transfer"?"Transfer":document.getElementById("inputCategory").value,source:document.getElementById("inputSource").value,destination:t==="transfer"?document.getElementById("inputDest").value:"",expense:t==="expense"?a:0,income:t==="income"?a:0,amount:t==="transfer"?a:0,admin:t==="transfer"?admin:0,type:t,notes:document.getElementById("inputNotes").value,});saveData();resetForm();});document.getElementById("inputDate").valueAsDate=new Date();setTransactionType("expense");renderAll();function checkWindowSize(){const minWidth=1200;const minHeight=700;const isAllowed=window.innerWidth>=minWidth&&window.innerHeight>=minHeight;document.getElementById('sizeBlocker').classList.toggle('hidden',isAllowed);}
+checkWindowSize();window.addEventListener('resize',checkWindowSize);</script>
 </body>
-
 </html>
