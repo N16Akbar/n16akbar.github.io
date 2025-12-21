@@ -1229,7 +1229,27 @@
             }
 
             saveData();
+
+            const lastDate = document.getElementById("inputDate").value;
+            const lastSource = document.getElementById("inputSource").value;
+            const lastType = document.getElementById("inputType").value;
+
+            // 2. Lakukan reset (untuk membersihkan nominal, deskripsi, dll)
             resetForm();
+
+            // 3. Kembalikan nilai yang diinginkan
+            document.getElementById("inputDate").value = lastDate;
+
+            // Set tipe dulu agar UI slider berubah sesuai tipe terakhir
+            setTransactionType(lastType);
+
+            // Set source (perlu timeout kecil kadang-kadang agar UI select siap, tapi biasanya langsung bisa)
+            document.getElementById("inputSource").value = lastSource;
+
+            // Jika tipe transfer, kembalikan juga tujuan jika mau
+            if (lastType === 'transfer') {
+                document.getElementById("inputDest").value = dest;
+            }
         });
 
         document.getElementById("inputDate").value = toISODate(new Date());
