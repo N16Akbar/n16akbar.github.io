@@ -480,28 +480,33 @@
             }
         }
 
-        async function saveFileLive() {
-            if (!fileHandle) return alert("Belum ada file yang dibuka dalam mode Live.");
+        async function saveFileLive(silent = false) {
+            if (!fileHandle) return alert("Belum ada file CSV yang dibuka!");
 
             try {
-                // 1. Generate konten CSV terbaru
                 const csvContent = generateCSVContent();
-
-                // 2. Buat stream writable ke file asli
                 const writable = await fileHandle.createWritable();
-
-                // 3. Tulis data
                 await writable.write(csvContent);
                 await writable.close();
 
-                // Feedback visual
-                const btn = document.getElementById('btnSaveLive');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = "✅ Tersimpan!";
-                setTimeout(() => btn.innerHTML = originalText, 2000);
+                // Feedback Visual di Badge Header
+                const badge = document.getElementById('fileStatusBadge');
+                const originalText = badge.innerText;
+                badge.innerText = "💾 Menyimpan...";
+                badge.classList.remove("text-emerald-400");
+                badge.classList.add("text-yellow-400");
+
+                setTimeout(() => {
+                    badge.innerText = "🟢 Terhubung & Tersimpan";
+                    badge.classList.remove("text-yellow-400");
+                    badge.classList.add("text-emerald-400");
+                }, 800);
+
+                if (!silent) alert("File berhasil disimpan!");
 
             } catch (err) {
-                alert("Gagal menyimpan ke file asli: " + err.message);
+                alert("Gagal menyimpan ke file: " + err.message);
+                throw err;
             }
         }
 
@@ -597,10 +602,10 @@
         ];
 
         let appState = {
-            transactions: JSON.parse(localStorage.getItem("keuangan_trx")) || [],
-            categories: JSON.parse(localStorage.getItem("keuangan_cats")) || [...defaultCategories],
-            sources: JSON.parse(localStorage.getItem("keuangan_srcs")) || [...defaultSources],
-            presets: JSON.parse(localStorage.getItem("keuangan_presets")) || [...defaultPresets],
+            transactions: [],
+            categories: [],
+            sources: [],
+            presets: [],
         };
 
         let activeSourceFilter = null,
@@ -615,12 +620,19 @@
             return adjusted.toISOString().split('T')[0];
         };
 
-        function saveData() {
-            localStorage.setItem("keuangan_trx", JSON.stringify(appState.transactions));
-            localStorage.setItem("keuangan_cats", JSON.stringify(appState.categories));
-            localStorage.setItem("keuangan_srcs", JSON.stringify(appState.sources));
-            localStorage.setItem("keuangan_presets", JSON.stringify(appState.presets));
+        async function saveData() {
+            // 1. Update UI
             renderAll();
+
+            // 2. Jika ada file terbuka, simpan otomatis ke CSV
+            if (fileHandle) {
+                try {
+                    await saveFileLive(true); // true = silent mode (tanpa alert sukses)
+                } catch (err) {
+                    console.error("Gagal auto-save:", err);
+                    document.getElementById('fileStatusBadge').innerText = "⚠️ Gagal Simpan!";
+                }
+            }
         }
 
         function renderAll() {
@@ -1090,10 +1102,12 @@
         }
 
         function deleteItem(id) {
-            if (confirm("Hapus transaksi ini?")) {
+            if (!fileHandle) return alert("Buka file CSV dulu untuk menghapus data.");
+
+            if (confirm("Hapus transaksi ini? Data di file CSV akan langsung berubah.")) {
                 appState.transactions = appState.transactions.filter((t) => t.id !== id);
                 if (editingId === id) resetForm();
-                saveData();
+                saveData(); // Ini akan trigger auto-save ke CSV
             }
         }
 
@@ -1195,6 +1209,14 @@
 
         document.getElementById("trxForm").addEventListener("submit", (e) => {
             e.preventDefault();
+
+            // --- VALIDASI WAJIB FILE ---
+            if (!fileHandle) {
+                alert("⛔ WAJIB BUKA FILE CSV DULU!\nSilakan klik tombol '📂 Buka CSV (Live)' di pojok kanan atas.");
+                return;
+            }
+            // ---------------------------
+
             const type = document.getElementById("inputType").value;
             const rawAmount = safeFloat(document.getElementById("inputAmount").value);
 
