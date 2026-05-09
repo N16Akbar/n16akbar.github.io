@@ -1,5 +1,3 @@
-package minggu8;
-
 class Main {
     public static void main(String[] args) {
         Bentuk2D persegi = new Persegi(41.69);

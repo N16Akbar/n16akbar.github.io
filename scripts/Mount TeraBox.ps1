@@ -1,5 +1,5 @@
 ./"Update rclone fork.ps1"
-& "C:\Portable\rclone.exe" mount ":combine,upstreams='TeraBox=terabox: MyLaptopEncrypted=terabox-mylaptop-crypt:':" T: `
+& "C:\Portable\rclone.exe" mount ":combine,upstreams='TeraBox=terabox: MyLaptopEncrypted=terabox-mylaptop-crypt:, MyPhone=terabox-myphone-crypt:':" T: `
   --vfs-cache-mode full `
   --exclude "/TeraBox/00_Personal/Personal Vault/**" `
   --exclude "/TeraBox/00_My Laptop/Encrypted/**" `
