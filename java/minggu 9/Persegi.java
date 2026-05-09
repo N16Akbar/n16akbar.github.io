@@ -1,5 +1,3 @@
-package minggu8;
-
 class Persegi extends Bentuk2D implements DapatDiwarnai {
     double sisi;
 

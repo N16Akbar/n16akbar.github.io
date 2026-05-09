@@ -1,5 +1,3 @@
-package minggu8;
-
 class Segitiga extends Bentuk2D implements DapatDiwarnai {
     double alas;
     double tinggi;

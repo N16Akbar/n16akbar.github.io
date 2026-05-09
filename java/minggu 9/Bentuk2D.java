@@ -1,5 +1,3 @@
-package minggu8;
-
 interface DapatDiwarnai {
     void warnai();
 }
