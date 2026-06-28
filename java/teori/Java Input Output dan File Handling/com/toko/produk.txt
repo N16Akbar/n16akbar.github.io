@@ -1,0 +1,3 @@
+mie goreng,3500.0,50
+telur ayam,2000.0,100
+mie rebus,3500.0,45

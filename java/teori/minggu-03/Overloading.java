@@ -1,4 +1,4 @@
-public class overloading {
+public class Overloading {
     public static int side;
     public static int length;
     public static int width;

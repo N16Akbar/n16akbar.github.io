@@ -40,7 +40,7 @@ class RekeningBank {
     }
 }
 
-public class latihanEncapsulation {
+public class LatihanEncapsulation {
     public static void main(String[] args) {
         String namaAkun = "Fulan";
         double saldo = 100000;
