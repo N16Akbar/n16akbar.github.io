@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-image: linear-gradient(135deg, #283c86 10%, #45a247 100%);
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        canvas {
+            border: 2px solid #444;
+            border-radius: 8px;
+            animation: slideIn 1s ease;
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+            animation: fadeIn 1s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        button:enabled {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #scoreboard {
+            font-size: 24px;
+            margin-top: 20px;
+            color: white;
+            animation: fadeIn 1s ease;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            animation: slideIn 1s ease;
+            margin-bottom: 20px;
+        }
+
+        .game-controls {
+            margin-top: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        .game-difficulty {
+            margin-bottom: 10px;
+            animation: slideIn 1s ease;
+            position: relative;
+        }
+
+        .game-difficulty label { font-size: 20px; }
+
+        .game-difficulty select {
+            font-size: 16px;
+            padding: 5px 30px 5px 10px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .game-difficulty select::-ms-expand { display: none; }
+
+        .game-difficulty select:hover { background-color: #e0e0e0; }
+
+        .game-difficulty select:focus {
+            outline: none;
+            box-shadow: 0 0 5px #007bff;
+        }
+
+        .game-difficulty::after {
+            content: "\25BC";
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+
+        .game-difficulty:hover::after {
+            color: #0056b3;
+        }
+
+        #playerName { color: white; }
+    </style>
+</head>
+<body>
+    <h1 id="playerName">Hi, Player!</h1>
+    <div class="game-container">
+        <h1>Game Ular Kobra</h1>
+        <div class="game-controls">
+            <div class="game-difficulty" id="difficultyContainer">
+                <label for="difficulty">Pilih Difficulty:</label>
+                <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            <div class="game-buttons">
+                <button id="startButton">Mulai Permainan</button>
+                <button id="restartButton" disabled>Mulai Ulang</button>
+            </div>
+            <div class="game-info" id="scoreboard"></div>
+        </div>
+        <canvas id="canvas" width="400" height="400"></canvas>
+    </div>
+    <audio id="chomp" src="chomp.wav"></audio>
+    <audio id="die" src="DIE.ogg"></audio>
+    <script src="snakemodhp.js"></script>
+</body>
+</html>

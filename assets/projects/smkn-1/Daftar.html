@@ -1,0 +1,87 @@
+<html>
+    <style type="text/css">
+        body {
+            color: #fdfdfd;
+            font-family: Segoe UI; 
+            background-color: #555555;
+            padding-bottom: 3.5%
+        }
+        form {
+            background-color: #333333;
+            width: 20%;
+            font-size: 15px;
+            border: 2px solid;
+            border-color: #fdfdfd
+        }
+        hr {
+            width: 20%;
+            color: #fdfdfd;
+            background-color: #fdfdfd
+        }
+        h2.pad {
+            padding: 5px
+        }
+        .center {
+            margin: auto;
+            margin-top: 70px;
+            padding: 1%
+        }
+        input.long {
+            width: 100%
+        }
+    </style>
+    <body>
+        <form class="center">
+            <h2 align="center" class="pad">
+                Daftar Siswa
+            <br>SMK Negeri 1 Bukittinggi
+            </h2>
+        <br>
+            <input class="long" type="text" name="NIS" placeholder="NIS">
+        <br>
+        <br>
+            <input class="long" type="text" name="Nama" placeholder="Nama Lengkap">
+        <br>
+        <br>
+            <input class="long" type="text" name="Tahun" placeholder="Tahun Masuk">
+        <br>
+        <br>
+            <b>
+                Jurusan :
+            </b>
+        <br>
+            <select name="Jurusan">
+                <option>TKR
+                <option>DPIB
+                <option>TEI
+                <option>TJKT
+                <option>T. ITL
+                <option>T. GEO
+                <option>T. LAS
+            </select>
+        <br>
+        <br>
+            <b>
+                Jenis Kelamin :
+            </b>
+        <br>
+            <input type="radio" name="Gender" value="Male">Laki-laki
+            <input type="radio" name="Gender" value="Female">Perempuan
+        <br>
+        <br>
+            <b>
+                Kelas :
+            </b>
+        <br>
+            <input type="checkbox" name="X">X
+        <br>
+            <input type="checkbox" name="XI">XI
+        <br>
+            <input type="checkbox" name="XII">XII
+        <br>
+        <br>
+            <input type="submit" value="Kirim">
+            <input type="reset" value="Reset">
+        </form>
+    </body>
+</html>

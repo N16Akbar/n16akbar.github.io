@@ -1,0 +1,29 @@
+/* Untuk tombol */
+.tombol {
+    padding             : 5px;
+    margin              : 5px;
+    font-size           : 20;
+    font-family         : Segoe UI;
+    font-weight         : bold
+}
+.tombol a{
+    display             : block;
+    margin-bottom       : 25px;
+    border-top          : 2px solid #acacac;
+    border-left         : 2px solid #acacac;
+    border-right        : 2px solid #4b4b4b;
+    border-bottom       : 2px solid #4b4b4b;
+    padding-top         : 30px;
+    text-align          : center;
+    background-color    : #6a6a6a;
+    color               : #fdfdfd;
+    width               : 200px;
+    height              : 65px;
+    text-decoration     : none
+}
+.tombol a:hover{
+    border-top          : 2px solid #4b4b4b;
+    border-left         : 2px solid #4b4b4b;
+    border-right        : 2px solid #acacac;
+    border-bottom       : 2px solid #acacac;
+}

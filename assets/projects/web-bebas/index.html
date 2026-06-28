@@ -1,0 +1,66 @@
+<html>
+<head>
+  <title>Rezki - Site</title>
+  <link rel="stylesheet" type="text/css" href="css/Effect.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #1a374d; font-family: Segoe UI; color: #fafafa; }
+    .nav { background-color: #203441; font-family: Teko; height: 64px; display: flex; align-items: center; padding: 0 20px; }
+    .nav img { width: 40px; margin-right: 12px; }
+    .nav-left { font-weight: bold; font-size: 28px; color: #fdfdfd; }
+    .nav-right { margin-left: auto; display: flex; gap: 20px; }
+    .nav-right a { color: #fdfdfd; text-decoration: none; font-size: 24px; transition: .2s; }
+    .nav-right a:hover { color: #6bafdd; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; height: calc(100vh - 64px); }
+    .grid-item { position: relative; overflow: hidden; cursor: pointer; }
+    .grid-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(30%); transition: ease-in-out .2s; position: absolute; }
+    .grid-item:hover img { filter: brightness(50%); }
+    .grid-item .label { position: absolute; bottom: 20px; left: 20px; font-family: Teko; z-index: 1; }
+    .grid-item .label h1 { font-size: 42px; }
+    .grid-item .label p { font-size: 24px; }
+    .grid-item a { display: block; width: 100%; height: 100%; text-decoration: none; color: inherit; }
+    .right-stack { display: grid; grid-template-rows: 1fr 1fr; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <img src="images/logo.png" />
+    <div class="nav-left">Rezki - Site</div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about/frame.html">About Me</a>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="grid-item">
+      <a href="astronvim/frame.html">
+        <img src="images/astronvimlooks.png" />
+        <div class="label">
+          <h1>AstroNvim</h1>
+          <p>Text editor berbasis Neovim yang simpel dan estetik</p>
+        </div>
+      </a>
+    </div>
+    <div class="right-stack">
+      <div class="grid-item">
+        <a href="pipes.sh/frame.html">
+          <img src="images/Term.png" />
+          <div class="label">
+            <h1>pipes.sh</h1>
+            <p>Screensaver terminal berbentuk pipa yang ringan</p>
+          </div>
+        </a>
+      </div>
+      <div class="grid-item">
+        <a href="lunarvim/frame.html">
+          <img src="images/lunarvim.png" />
+          <div class="label">
+            <h1>LunarVim</h1>
+            <p>Text editor berbasis Neovim yang bisa menjadi IDE</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

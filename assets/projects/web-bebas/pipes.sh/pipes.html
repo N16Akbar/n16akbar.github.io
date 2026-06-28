@@ -1,0 +1,154 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../css/Effect.css" />
+
+<body>
+    <div class="box-about">
+        <h2>About Me</h2>
+        <img class="about" src="../images/profile.jpg" width="120" />
+        <p class="about">
+            Nama saya Mifthahul Rezki Akbar. Lebih biasa dipanggil Akbar.
+            Saya adalah siswa dari SMK Negeri 1 Bukittinggi. Saya memiliki
+            hobi mengotak-atik laptop saya sendiri. Saya tertarik dengan
+            hal-hal yang berkaitan dengan Linux.
+        </p>
+    </div>
+    <div class="box-about" id="daftar">
+        <h2>Daftar Isi</h2>
+        <div class="daftar">
+            <ul>
+                <li><a href="#sub1">Apa Itu pipes.sh?</a></li>
+                <li><a href="#sub2">Fitur Yang Dimiliki</a></li>
+                <li><a href="#sub3">Instalasi Program</a></li>
+                <li><a href="#sub4">Penggunaan Program</a></li>
+                <li><a href="#sub5">Contoh Penggunaan</a></li>
+                <li><a href="#sub6">Kesimpulan</a></li>
+            </ul>
+        </div>
+    </div>
+    <h1 class="pipes">
+        pipes.sh - Sebuah Program Untuk Menampilkan
+        <br />
+        Screensaver pada Terminal
+    </h1>
+    <hr />
+    <img class="pipes" src="../images/Term.png" width="740" />
+    <p class="pipes">
+        Pada artikel ini, kita akan membahas tentang sebuah program bernama
+        <br />
+        pipes.sh. Memang nama ini terdengar aneh, tetapi ini menggunakan
+        <br />
+        bahasa C dan Bash sebagai pembuatan programnya.
+    </p>
+    <h1 class="pipes-sub" id="sub1">Apa Itu pipes.sh?</h1>
+    <p class="pipes">
+        pipes.sh merupakan program sebagai screensaver pada terminal Linux.
+        <br />
+        Program ini memiliki ukuran yang kecil. pipes.sh menggunakan bahasa
+        <br />
+        pemrograman C dan Bash.
+    </p>
+    <h1 class="pipes-sub" id="sub2">Fitur Yang Dimiliki</h1>
+    <p class="pipes">
+        -> Ringan
+        <br />
+        -> Kode progamnya bisa dimodifikasi
+        <br />
+        -> Bisa digunakan di semua terminal Linux
+        <br />
+        -> Bisa dikustomisasi dengan banyak pilihan
+    </p>
+    <h1 class="pipes-sub" id="sub3">Instalasi Program</h1>
+    <p class="pipes">
+        Untuk paket pipes.sh sudah tersedia di beberapa distribusi Linux.
+        <br />
+        Jika distribusi Linux yang kita pakai tidak menyediakan paket
+        <br />
+        pipes.sh, kita bisa membangun paket pipes.sh dari Github.
+    </p>
+    <p class="pipes">
+        -> Arch Linux
+        <br />
+        Untuk distro berbasis Arch Linux, pertama-tama kita
+        <br />
+        harus memasang
+        <span class="bg"><a href="https://wiki.archlinux.org/title/AUR_helpers">AUR Helper</a></span>, yaitu
+        <span class="bg"><a href="https://aur.archlinux.org/packages/yay">yay</a></span>.
+    </p>
+    <div class="box">
+        <p class="command">
+            <span class="comment"># Install git package.</span>
+            <br />
+            $ sudo pacman -S git
+            <br />
+            $ git clone https://aur.archlinux.org/yay-git.git
+            <br />
+            <span class="comment"># Installing yay from the source code.</span>
+            <br />
+            $ makepkg -si
+            <br />
+            <span class="comment"># Using yay to install pipes.sh.</span>
+            <br />
+            $ yay -S pipes.sh
+        </p>
+    </div>
+    <p class="pipes">-> Distro Lainnya code GitHub</p>
+    <div class="box">
+        <p class="command">
+            <span class="comment"># Clone the pipes.sh repository.</span>
+            <br />
+            $ git clone https://github.com/pipeseroni/pipes.sh.git
+            <br />
+            $ sudo make install
+        </p>
+    </div>
+    <h1 class="pipes-sub" id="sub4">Penggunaan Program</h1>
+    <p class="pipes">
+        pipes.sh memiliki flags yang bisa digunakan agar program ini
+        <br />
+        bisa dimodifikasi sesuka hati. Untuk melihat flags yang tersedia,
+        <br />
+        kita bisa mengetik perintah <span class="bg">man pipes.sh</span>.
+    </p>
+    <h1 class="pipes-sub" id="sub5">Contoh Penggunaan</h1>
+    <p class="pipes">
+        pipes.sh bisa dikustomisasi sesuai dengan keinginan kita. program
+        <br />
+        ini.
+    </p>
+    <img class="pipes" src="../images/Opsi.png" width="740" />
+    <p class="pipes">
+        Berikut contoh gambar penggunaan pipes.sh sebagai screensaver jenis
+        <br />
+        pipa, menggunakan opsi <span class="bg">-t [0-9]</span>.
+    </p>
+    <img class="pipes" src="../images/C1.png" width="740" />
+    <p class="pipes">
+        Kita juga bisa mengubah warna pipa menjadi hanya 1 warna saja. Kita
+        <br />
+        perlu menggunakan opsi <span class="bg">-c [0-256]</span> atau
+        <span class="bg">-c [#0 - #FF]</span>.
+    </p>
+    <div class="pipes">
+        <img class="pipes" src="../images/C2.png" width="740" />
+        <img class="pipes" src="../images/C3.png" width="740" />
+    </div>
+    <p class="pipes">
+        Dan masih banyak lagi opsi flags yang bisa kita gunakan untuk
+        <br />
+        kustomisasi program pipes.sh ini.
+    </p>
+    <h1 class="pipes-sub" id="sub6">Kesimpulan</h1>
+    <p class="pipes">
+        pipes.sh merupakan program yang unik sebagai screensaver untuk
+        <br />
+        terminal. Ini merupakan program yang bisa dikonfigurasi sesuai
+        <br />
+        dengan selera kita. Di GitHub, program ini sudah memiliki stars
+        <br />
+        lebih dari 1.200! terjadi kemungkinan error pada program ini jika
+        <br />
+        kita menggunakan shell lain, seperti zsh dan fish.
+    </p>
+</body>
+
+</html>

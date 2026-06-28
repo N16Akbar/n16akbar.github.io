@@ -1,0 +1,261 @@
+/* all */
+body {
+    font-family: Segoe UI;
+    color: #fafafa;
+    background-color: #1a374d;
+}
+
+hr {
+    background-color: #fafafa;
+    color: #fafafa;
+    width: 39%;
+    height: 2px;
+    margin-left: 21%;
+    margin-bottom: 2%;
+}
+
+.bg {
+    font-size: 16;
+    font-family: Courier;
+    background-color: #406882;
+    border-left: 4px solid #406882;
+    border-right: 4px solid #406882;
+    border-radius: 5px;
+}
+
+a:link,
+a:visited {
+    text-decoration: none;
+    color: #fdfdfd;
+    transition: 0.2s linear;
+}
+
+a:hover {
+    color: #6bafdd;
+}
+
+/* about.html */
+.about-me {
+    position: absolute;
+    background-color: #152c3e;
+    border-radius: 10px;
+    margin-left: 27%;
+    padding: 10px 20px 20px 0px;
+    box-shadow: 10px 10px 5px 5px rgba(0, 0, 0, 0.2);
+    width: 25%;
+}
+
+.about-me img {
+    margin-top: 5%;
+    margin-left: 30%;
+    margin-bottom: 5%;
+    border-radius: 10px;
+}
+
+/* title.html */
+body.title {
+    color: #fdfdfd;
+    font-family: Teko;
+    background-color: #203441;
+}
+
+.title ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.title li {
+    float: left;
+}
+
+.title li a {
+    font-size: 24;
+    display: block;
+    text-align: center;
+    padding: 25px 15px;
+}
+
+.title img {
+    display: inline;
+    float: left;
+    margin: 17.5px 0px 0px 20px;
+}
+
+.title-right {
+    float: right;
+    margin-right: 45px;
+}
+
+.title-left {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 28px;
+    margin: 20px 0px 0px 20px;
+}
+
+/* pipes.html */
+h1.pipes {
+    margin-left: 21%;
+    margin-top: 2%;
+}
+
+h1.pipes-sub {
+    margin-left: 21%;
+    color: #6998ab;
+}
+
+img.pipes {
+    background-color: #406882;
+    border-radius: 10px;
+    margin-left: 21%;
+    margin-bottom: 1%;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+p.pipes {
+    margin-left: 21%;
+    margin-bottom: 2%;
+    font-family: JetBrainsMono Nerd Font;
+    font-size: 18;
+}
+
+/* astronvim.html */
+.astro img {
+    background-color: #406882;
+    margin-left: 21%;
+    margin-bottom: 1%;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* box about */
+.box-about {
+    position: absolute;
+    right: 5%;
+    background-color: #152c3e;
+    border-radius: 10px;
+    padding: 0px 20px 10px 20px;
+    box-shadow: 10px 10px 5px 5px rgba(0, 0, 0, 0.2);
+    width: 25%;
+}
+
+.box-about#daftar {
+    position: sticky;
+    float: right;
+    top: 2%;
+    background-color: #152c3e;
+    margin-top: 14%;
+    padding: 5px 20px 10px 20px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 5px 5px rgba(0, 0, 0, 0.2);
+    width: 25%;
+}
+
+.daftar {
+    background-color: #1a374d;
+    border-radius: 10px;
+    padding: 5px 0px 5px 0px;
+}
+
+.daftar ul {
+    font-family: Ubuntu NF;
+    font-size: 16;
+    list-style-type: upper-roman;
+}
+
+.daftar li {
+    padding-bottom: 5px;
+}
+
+img.about {
+    float: left;
+    border-radius: 100px;
+    margin: 0%;
+}
+
+p.about {
+    display: flex;
+    text-align: justify;
+    font-family: Ubuntu NF;
+    font-size: 18;
+    padding-left: 5%;
+}
+
+/* box command */
+.box {
+    background-color: #335368;
+    border: 2px solid #335368;
+    border-radius: 10px;
+    margin-left: 21%;
+    margin-bottom: 2%;
+    padding-left: 1%;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+    width: 35%;
+}
+
+p.command {
+    font-family: JetBrains Mono SemiBold;
+    font-size: 16;
+}
+
+.comment {
+    color: #406882;
+}
+
+/* img background */
+.content-1 img {
+    filter: brightness(30%);
+    position: absolute;
+    transition: ease-in-out 0.2s;
+    width: 275%;
+    margin-top: -1%;
+    margin-left: -1%;
+    z-index: -1;
+}
+
+.content-1 img:hover {
+    filter: brightness(50%);
+}
+
+.content-2 img {
+    filter: brightness(30%);
+    position: absolute;
+    transition: ease-in-out 0.2s;
+    width: 125%;
+    margin-top: -5%;
+    margin-left: -15%;
+    z-index: -1;
+}
+
+.content-2 img:hover {
+    filter: brightness(50%);
+}
+
+.content-3 img {
+    filter: brightness(30%);
+    position: absolute;
+    transition: ease-in-out 0.2s;
+    width: 275%;
+    margin-top: -1%;
+    margin-left: -1%;
+    z-index: -1;
+}
+
+.content-3 img:hover {
+    filter: brightness(50%);
+}
+
+.content {
+    font-family: Teko;
+    position: absolute;
+    margin-left: 4%;
+    bottom: 4%;
+}
+
+.content h1 {
+    font-size: 42;
+}
+
+.content p {
+    font-size: 24;
+}

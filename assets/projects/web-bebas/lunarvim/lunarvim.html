@@ -1,0 +1,99 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../css/Effect.css" />
+
+<body>
+    <div class="box-about">
+        <h2>About Me</h2>
+        <img class="about" src="../images/profile.jpg" width="120" />
+        <p class="about">
+            Nama saya Mifthahul Rezki Akbar. Lebih biasa dipanggil Akbar.
+            Saya adalah siswa dari SMK Negeri 1 Bukittinggi. Saya memiliki
+            hobi mengotak-atik laptop saya sendiri. Saya tertarik dengan
+            hal-hal yang berkaitan dengan Linux.
+        </p>
+    </div>
+    <div class="box-about" id="daftar">
+        <h2>Daftar Isi</h2>
+        <div class="daftar">
+            <ul>
+                <li><a href="#sub1">Apa itu LunarVim?</a></li>
+                <li><a href="#sub2">Tampilan LunarVim</a></li>
+                <li><a href="#sub3">Instalasi LunarVim</a></li>
+            </ul>
+        </div>
+    </div>
+    <h1 class="pipes">
+        LunarVim - Text Editor Berbasis Neovim yang
+        <br />
+        Bisa Menjadi IDE.
+    </h1>
+    <hr />
+    <div class="astro">
+        <img src="../images/lunarvim.png" width="740" />
+    </div>
+    <p class="pipes">
+        Pada artikel ini, kita akan membahas sebuah text editor bernama
+        <br />
+        LunarVim. Text editor ini merupakan fork (pengembangan) dari
+        <br />
+        Vim, dimana semua plugin yang tersedia untuk Neovim digabung
+        <br />
+        dan dibentuk menjadi sebuah text editor. LunarVim juga bisa
+        <br />
+        dijadikan sebagai IDE editor.
+    </p>
+    <h1 class="pipes-sub" id="sub1">Apa itu LunarVim?</h1>
+    <p class="pipes">
+        LunarVim merupakan text editor yang berbasis Neovim, dimana
+        <br />
+        plugin-plugin yang berhubungan dengan IDE editor disatukan
+        <br />
+        dan menjadi sebuah text editor yang baru.
+    </p>
+    <h1 class="pipes-sub" id="sub2">Tampilan LunarVim</h1>
+    <div class="astro">
+        <img src="../images/lunarvimpreview.png" width="740">
+    </div>
+    <p class="pipes">
+        Saat pertama kali membuka LunarVim, kita akan ditampilkan
+        <br />
+        dengan shortcut yang mirip dengan AstroNvim. Kita juga
+        <br />
+        mendapat logo LunarVim berbentuk dot-dot yang menyatu
+    </p>
+    <h1 class="pipes-sub" id="sub3">Instalasi LunarVim</h1>
+    <p class="pipes">
+        Untuk menginstal LunarVim sebenarnya cukup mudah. Kita hanya
+        <br />
+        perlu menyiapkan bahan-bahan seperti berikut :
+    </p>
+    <p class="pipes">
+        -> Neovim (v0.8.0 atau lebih)
+        <br />
+        -> Bahan untuk build LunarVim (git, make, pip, python, node,
+        <br />
+        dan cargo)
+    </p>
+    <p class="pipes">
+        Langsung saja kita ke tahapan instalasi LunarVim nya!
+    </p>
+    <div class="box">
+        <p class="command">
+            <span class="comment"># Installing build dependencies</span>
+            <br />
+            $ sudo apt install git make pip python node cargo
+        </p>
+        <p class="command">
+            <span class="comment"># Installing LunarVim</span>
+            <br />
+            $ LV_BRANCH='release-1.2/neovim-0.8' \
+            <br />
+            bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh) </p>
+        </p>
+    </div>
+    <p class="pipes">
+        Secara otomatis, LunarVim akan terinstal pada distribusi Linux kita.
+    </p>
+</body>
+
+</html>

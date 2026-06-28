@@ -1,0 +1,87 @@
+/* Properti untuk list */
+a:link {
+    text-decoration     : none
+}
+
+a:hover {
+    color               : #f00000;
+    text-decoration     : none
+}
+
+a:visited.list {
+    color               : #A5C9CA;
+    text-decoration     : none
+}
+
+a:visited#judul {
+    color               : #d1d1d1;
+    text-decoration     : none
+}
+
+body.list {
+    color               : #fdfdfd;
+    background-color    : #181818;
+    font-family         : Inter;
+    font-weight         : bold;
+    padding-top         : 1.75%;
+}
+
+hr {
+    color               : #fdfdfd;
+    background-color    : #fdfdfd
+}
+
+h1.list {
+    text-align          : center
+}
+
+ul.list {
+    font-size           : 24;
+    margin-left         : 5%;
+    padding-top         : 5%
+}
+
+li.list {
+    padding-bottom      : 2%
+}
+
+/* Properti untuk file makanan */
+body.makanan {
+    background-color    : #444444
+}
+
+img.makanan{
+    width               : 1024;
+    height              : 512;
+    border-color        : #FAF9F6
+}
+
+p.makanan {
+    font-size           : 24;
+    font-family         : Inter;
+    color               : #fdfdfd
+}
+
+/* Properti untuk list menu */
+body.listmenu {
+    background-color    : #362222
+}
+
+table.listmenu {
+    color               : #fdfdfd;
+    font-size           : 20;
+    font-family         : Inter;
+    border-color        : #fdfdfd;
+    border-collapse     : collapse
+}
+
+td.listmenu {
+    text-align          : center
+}
+
+/* Properti untuk logo restoran */
+img.logo {
+    padding-left        : 1%;
+    width               : 48;
+    height              : 48
+}

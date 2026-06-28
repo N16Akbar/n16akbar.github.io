@@ -1,0 +1,182 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../css/Effect.css" />
+
+<body>
+    <div class="box-about">
+        <h2>About Me</h2>
+        <img class="about" src="../images/profile.jpg" width="120" />
+        <p class="about">
+            Nama saya Mifthahul Rezki Akbar. Lebih biasa dipanggil Akbar.
+            Saya adalah siswa dari SMK Negeri 1 Bukittinggi. Saya memiliki
+            hobi mengotak-atik laptop saya sendiri. Saya tertarik dengan
+            hal-hal yang berkaitan dengan Linux.
+        </p>
+    </div>
+    <div class="box-about" id="daftar">
+        <h2>Daftar Isi</h2>
+        <div class="daftar">
+            <ul>
+                <li><a href="#sub1">Pengenalan Neovim</a></li>
+                <li><a href="#sub2">Apa itu AstroNvim?</a></li>
+                <li><a href="#sub3">Tampilan AstroNvim</a></li>
+                <li><a href="#sub4">Instalasi AstroNvim</a></li>
+            </ul>
+        </div>
+    </div>
+    <h1 class="pipes">
+        AstroNvim - Sebuah Text Editor yang Minimalis,
+        <br />
+        dan Fungsional
+    </h1>
+    <hr />
+    <div class="astro">
+        <img src="../images/astronvim.png" width="740" />
+    </div>
+    <p class="pipes">
+        Pada artikel ini, kita akan membahas sebuah text editor bernama
+        <br />
+        AstroNvim. Text editor ini merupakan fork (pengembangan) dari
+        <br />
+        Neovim, dimana semua plugin yang tersedia untuk Neovim digabung
+        <br />
+        dan dibentuk menjadi sebuah text editor yang siap digunakan
+        <br />
+        tanpa perlu melakukan konfigurasi pada file config.
+    </p>
+    <h1 class="pipes-sub" id="sub1">Pengenalan Neovim</h1>
+    <p class="pipes">
+        Sebelum mengenal lebih lanjut apa itu AstroNvim, alangkah baiknya
+        <br />
+        kita harus tau apa itu Neovim. Neovim merupakan pengembangan dari
+        <br />
+        text editor bernama Vim. Vim sendiri adalah text editor dan Vim
+        <br />
+        merupakan versi peningkatan dari Vi.
+    </p>
+    <p class="pipes">
+        Neovim memiliki kelebihan, dimana Neovim menggunakan bahasa
+        <br />
+        pemrograman Lua. Bahasa pemrograman ini digunakan sebagai dasar
+        <br />
+        membuat plugin untuk Neovim. Walaupun Vim-script (bahasa skrip
+        <br />
+        untuk Vim) bisa digunakan untuk membuat plugin, namun Lua dapat
+        <br />
+        membuat plugin dengan lebih optimal.
+    </p>
+    <p class="pipes">
+        Bagi para pengguna Neovim tingkat lanjut, ini merupakan sebuah
+        <br />
+        keuntungan karena dapat menggunakan bahasa pemrograman Lua untuk
+        <br />
+        membuat plugin, patch, dll.. Hal ini juga merupakan benefit
+        <br />
+        bagi Lua programmer yang menggunakan Neovim sebagai text editor.
+        <br />
+        Namun, bagi para pengguna baru yang ingin menggunakan Neovim,
+        <br />
+        ini bukan merupakan hal yang terlalu benefit bagi mereka.
+    </p>
+    <p class="pipes">
+        Neovim bisa menjadi salah satu text editor yang sulit bagi para
+        <br />
+        pengguna baru atau pemula. Mengapa? Karena untuk dapat merasakan
+        <br />
+        benefit dari menggunakan Neovim, Neovim perlu ditambahkan beberapa
+        <br />
+        plugin untuk menambahkan fungsi dan fitur-fitur lainnya. Nah,
+        <br />
+        inilah yang menjadi masalah. Mengkonfigurasi Neovim bukan merupakan
+        <br />
+        hal yang mudah, karena kita harus mengetahui bahasa pemrograman
+        <br />
+        agar mengkonfigurasi menjadi lebih mudah. Ini juga menjadi hal
+        <br />
+        yang kompleks jika kita tidak teliti dalam mengkonfigurasi, karena
+        <br />
+        bisa terjadi error. Bahkan, kita benar-benar tidak tahu apa yang
+        <br />
+        menjadi penyebab dari error tersebut.
+    </p>
+    <h1 class="pipes-sub" id="sub2">Apa itu AstroNvim?</h1>
+    <p class="pipes">
+        AstroNvim merupakan text editor berbasis Neovim, dimana beberapa
+        <br />
+        plugin yang tersedia akan digunakan dan menjadi sebuah text editor
+        <br />
+        yang fungsional dan memiliki fitur-fitur yang biasa ditemukan pada
+        <br />
+        text editor lainnya. AstroNvim memudahkan pengguna dalam mencoba
+        <br />
+        Neovim, karena kita tidak perlu mengkonfigurasi file config Neovim
+        <br />
+        untuk menambahkan plugin, menambahkan shortcut, memodifikasi tampilan
+        <br />
+        Neovim, dan lainnya. Hal ini yang menjadi kelebihan dari AstroNvim,
+        <br />
+        yaitu sebuah text editor yang berfungsi OOTB (Out Of The Box).
+    </p>
+    <h1 class="pipes-sub" id="sub3">Tampilan AstroNvim</h1>
+    <div class="astro">
+        <img src="../images/astronvimhome.png" width="740" />
+    </div>
+    <p class="pipes">
+        Penampilan awal dari AstroNvim terlihat sangat minimalis. Pada halaman
+        <br />
+        awal (Home), kita ditampilkan beberapa shortcut AstroNvim, seperti
+        <br />
+        mencari file, melihat file yang baru saja dibuka, mencari kata, membuat
+        <br />
+        file baru, membuat penanda, dan memuat sesi terakhir.
+    </p>
+    <div class="astro">
+        <img src="../images/astronvimlooks.png" width="740" />
+    </div>
+    <p class="pipes">
+        Saat kita mengedit file menggunakan AstroNvim, tampilannya akan seperti
+        <br />
+        ini. Kita bisa mengaktifkan Explorer dengan shortcut SPC + e. Kita juga
+        <br />
+        bisa melakukan split windows sama halnya dengan VSCode. Secara otomatis,
+        <br />
+        code yang kita tulis akan diberi warna syntax.
+    </p>
+    <div class="astro">
+        <img src="../images/astronvimpersonal.png" width="740" />
+    </div>
+    <p class="pipes">
+        Kita juga bisa mengaktifkan terminal pada AstroNvim dengan shortcut
+        <br />
+        SPC + t + v untuk membuka terminal secara vertical split. Masih banyak
+        <br />
+        fitur-fitur yang tersedia pada AstroNvim ini. Langsung saja kita ke
+        <br />
+        tahapan instalasinya!
+    </p>
+    <h1 class="pipes-sub" id="sub4">Instalasi AstroNvim</h1>
+    <p class="pipes">
+        Kali ini kita akan mencoba menginstal AstroNvim di Linux. Sebenarnya,
+        <br />
+        instalasi AstroNvim ini sangat mudah dan tidak terlalu kompleks.
+    </p>
+    <div class="box">
+        <p class="command">
+            <span class="comment"># Installing Neovim</span>
+            <br />
+            $ sudo apt install neovim <span class="comment"># Ubuntu/Debian</span>
+            <br />
+            $ sudo pacman -S neovim <span class="comment"># Arch Linux</span>
+            <br />
+            $ sudo dnf install neovim <span class="comment"># Fedora</span>
+        </p>
+        <p class="command">
+            <span class="comment"># Installing AstroNvim</span>
+            <br />
+            $ git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+            <br />
+            $ nvim +PackerSync
+        </p>
+    </div>
+</body>
+
+</html>

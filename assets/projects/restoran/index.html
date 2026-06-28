@@ -1,0 +1,50 @@
+<html>
+<head>
+  <title>Website Restoran</title>
+  <link rel="stylesheet" type="text/css" href="External Effect.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { display: flex; flex-direction: column; height: 100vh; background-color: #2B2B2B; }
+    .top { background-color: #2B2B2B; padding: 10px 20px; display: flex; align-items: center; gap: 12px; height: 64px; }
+    .top img { width: 40px; }
+    .top h1 { font-family: Inter; color: #fdfdfd; font-size: 36px; font-weight: bold; }
+    .middle { display: flex; flex: 1; overflow: hidden; }
+    .sidebar { width: 30%; background-color: #181818; padding: 20px; overflow-y: auto; }
+    .sidebar h2 { text-align: center; color: #fdfdfd; font-family: Inter; margin-bottom: 10px; }
+    .sidebar hr { width: 50%; margin: 0 auto 20px; border: none; height: 2px; background-color: #fdfdfd; }
+    .sidebar ul { list-style: none; }
+    .sidebar li { margin-bottom: 16px; }
+    .sidebar a { color: #fdfdfd; text-decoration: none; font-size: 22px; font-family: Inter; font-weight: bold; }
+    .sidebar a:hover { color: #f00000; }
+    .content { flex: 1; }
+    .content iframe { width: 100%; height: 100%; border: none; }
+    .bottom { background-color: #2B2B2B; padding: 10px; text-align: center; color: #fdfdfd; font-family: Inter; height: 48px; display: flex; align-items: center; justify-content: center; }
+    a#judul { color: #d1d1d1; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <img src="Gambar/Logo Restoran.png" />
+    <h1>Web Site Restoran</h1>
+  </div>
+  <div class="middle">
+    <div class="sidebar">
+      <h2><a id="judul" href="List Menu.html" target="content">Daftar Menu</a></h2>
+      <hr>
+      <ul>
+        <li><a href="Nasi Goreng.html" target="content">Nasi Goreng</a></li>
+        <li><a href="Mie Goreng.html" target="content">Mie Goreng</a></li>
+        <li><a href="Spaghetti.html" target="content">Spaghetti</a></li>
+        <li><a href="Burger.html" target="content">Burger</a></li>
+        <li><a href="Kebab.html" target="content">Kebab</a></li>
+        <li><a href="Ramen.html" target="content">Ramen</a></li>
+        <li><a href="Sup.html" target="content">Sup</a></li>
+      </ul>
+    </div>
+    <div class="content">
+      <iframe name="content" src="List Menu.html"></iframe>
+    </div>
+  </div>
+  <div class="bottom">Terima kasih telah berkunjung</div>
+</body>
+</html>
