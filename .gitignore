@@ -1,0 +1,5 @@
+WD/
+archive/
+scripts/rclone/rclone.conf
+scripts/python/mobilism_cookie.txt
+scripts/*.exe
